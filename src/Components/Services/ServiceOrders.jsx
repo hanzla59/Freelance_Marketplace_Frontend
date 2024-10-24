@@ -29,6 +29,32 @@ const OrderCard = ({ order }) => {
     isBuyer = 'buyer';
   }
 
+  //handle cancel order and update the ui
+
+  const handleCancelOrder = async (orderId) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/fyp/orderCancelled/${orderId}`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      alert(response.data.message);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+      
+
+      
+    } catch (err) {
+      alert('Failed to cancel the order');
+    }
+  }
+  
   return (
     <Card sx={{ my: 2, p: 0, border: '2px solid #31473A', backgroundColor: '#EDF4F2' }}>
       <CardContent>
@@ -71,13 +97,13 @@ const OrderCard = ({ order }) => {
                       <Button variant="contained" color="success" sx={{ mr: 1 }}>
                         Complete Order
                       </Button>
-                      <Button variant="outlined" color="error">
+                      <Button variant="outlined" color="error" onClick={() => handleCancelOrder(order._id)}>
                         Cancel Order
                       </Button>
                     </>
                   )}
                   {isBuyer && (
-                    <Button variant="contained" color="error">
+                    <Button variant="contained" color="error" onClick={() => handleCancelOrder(order._id)}>
                       Cancel Order
                     </Button>
                   )}
