@@ -7,32 +7,45 @@ import {
   Grid,
   Rating,
   Button,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const MyServiceCard = ({ service }) => {
+const MyServiceCard = ({ service, onServiceDelete }) => {
   const navigate = useNavigate();
-  const cardRef = useRef(null); // Create a reference for the card
+  const cardRef = useRef(null);
 
   const handleClick = () => {
-    console.log('Card reference:', cardRef.current); // Log or manipulate the card reference
     navigate(`/service/${service.id}`);
   };
 
-  const handleDelete = () => {
-    // console.log(`Deleting service with ID: ${service.id}`);
-    //  Add your delete logic here
+  const handleDelete = (event) => {
+    event.stopPropagation();
+
+    axios
+      .delete(`http://localhost:5000/fyp/deleteService/${service.id}`, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then((response) => {
+        onServiceDelete(); // Call the callback to refresh services
+      })
+      .catch((error) => {
+        console.error('Error deleting service:', error);
+      });
   };
 
   const handleUpdate = () => {
-    // console.log(`Updating service with ID: ${service.id}`);
-    // navigate(`/update-service/${service.id}`);
+    // Implement update functionality if needed
   };
 
   return (
     <Card
-      ref={cardRef} // Attach the ref to the card
+      ref={cardRef}
       onClick={handleClick}
       sx={{ width: '100%', maxWidth: 280, cursor: 'pointer', boxShadow: 3 }}
     >
@@ -49,7 +62,7 @@ const MyServiceCard = ({ service }) => {
             <Typography variant="body2">{service.location}</Typography>
           </Grid>
           <Grid item>
-            <Typography variant="body2">${service.price}</Typography>
+            <Typography variant="body2">PKR {service.price}</Typography>
           </Grid>
         </Grid>
         <Grid
@@ -89,31 +102,40 @@ const MyServiceCard = ({ service }) => {
   );
 };
 
-
- // The component you shared earlier
-
-
 const MyServices = () => {
   const [services, setServices] = useState([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // default severity
+
+  const fetchServices = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/fyp/getServiceByUser', {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      setServices(response.data.services);
+    } catch (error) {
+      console.error('Error fetching user services:', error);
+    }
+  };
 
   useEffect(() => {
-    // Fetch the services for the logged-in user
-    const fetchServices = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/fyp/getServiceByUser',{
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          }
-        }); // Adjust the URL if needed
-        setServices(response.data.services);
-      } catch (error) {
-        console.error('Error fetching user services:', error);
-      }
-    };
-
     fetchServices();
   }, []);
+
+  const handleServiceDelete = () => {
+    fetchServices(); // Refresh the service list after deletion
+    setSnackbarMessage('Service deleted successfully!');
+    setSnackbarSeverity('success');
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   return (
     <div>
@@ -131,17 +153,24 @@ const MyServices = () => {
                   totalOrders: service.orders,
                   rating: service.rating,
                 }}
+                onServiceDelete={handleServiceDelete} // Pass the callback
               />
             </Grid>
           ))
         ) : (
-          <Typography variant="body1">You have no services listed yet.</Typography>
+          <Typography variant="body1" sx={{ mt: 2 , ml:2}}>You have no services listed yet.</Typography>
         )}
       </Grid>
+
+      {/* Snackbar for success/error messages */}
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
 
 export default MyServices;
-
 

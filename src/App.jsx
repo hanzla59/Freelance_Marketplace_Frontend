@@ -15,6 +15,7 @@ import MyTasks from "./Components//Tasks/MyTasks";
 import TaskReviews from "./Components/Tasks/TaskReviews";
 import ReceiveBids from "./Components/Tasks/ReceiveBids";
 import ServiceLandingPage from "./Components/Services/ServiceLandingPage";
+import VerificationDialog from "./Components/User/verificaation";
 
 // Protected Route component for authenticated users
 const ProtectedRoute = ({ children }) => {
@@ -37,7 +38,7 @@ function App() {
       {/* Routes for different pages */}
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home  />} />
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/services" element={<Services />} />
         <Route path="/login" element={<Login />} />
@@ -49,6 +50,7 @@ function App() {
         <Route path="/task-orders" element={<ProtectedRoute><TaskOrders /></ProtectedRoute>} />
         <Route path="/service-orders" element={<ProtectedRoute><ServiceOrders /></ProtectedRoute>} />
         <Route path="/update-profile" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
+        <Route path="/verify-account" element={<ProtectedRoute><VerificationDialog /></ProtectedRoute>} />
         
         {/* Conditional Routes based on User Role */}
         <Route path="/my-services" element={<ProtectedRoute><MyServices /></ProtectedRoute>} />
@@ -68,7 +70,7 @@ function App() {
 // Home component (for when no specific path is matched)
 const Home = () => {
   return (
-    <div>
+    <div >
       <h1>Welcome to MyPlatform</h1>
       <p>Outsource your tasks or offer services here!</p>
     </div>
