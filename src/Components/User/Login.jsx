@@ -174,7 +174,7 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import image from "../../assets/react.svg";
+
 
 const Login = () => {
     const [username, setUsername] = useState("");

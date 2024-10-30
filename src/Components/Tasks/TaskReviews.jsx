@@ -28,7 +28,8 @@ const TaskReviews = () => {
   }, [username]);
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+      <Typography variant="h5">My Completed Task Reviews</Typography>
       {reviews.length > 0 ? (
         reviews.map((review, index) => (
           <Card
@@ -40,7 +41,7 @@ const TaskReviews = () => {
               alignItems: 'flex-start',
               justifyContent: 'space-between',
               boxShadow: 3,
-              marginBottom: 2,
+              marginBottom: 1,
               border: '2px solid darkgreen',
             }}
           >

@@ -3,7 +3,7 @@ import { Card, Box, Typography, Button, useTheme, useMediaQuery } from '@mui/mat
 import OrderDetailDialog from './OrderDetailDialog'; // Import the dialog component
 import ReviewDialog from './ReviewDialog'; // Import the review dialog component
 
-const OrderCard = ({ orderId, price, status, sellerName, buyerName, creationDate, work, image, video, onCancel, onComplete }) => {
+const OrderCard = ({ orderId, price, status, sellerName, buyerName, creationDate, work, image, video, onCancel, onComplete}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -33,7 +33,7 @@ const OrderCard = ({ orderId, price, status, sellerName, buyerName, creationDate
       <Card sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', padding: 2, boxShadow: 3, marginBottom: 1, border: '2px solid #31473A', backgroundColor: '#EDF4F2' }}>
         <Box flex={2} sx={{ display: 'flex', flexDirection: 'column' }}>
           <Typography variant="h6" component="div" gutterBottom>
-            Order ID: {orderId}
+            OrderId: {orderId}
           </Typography>
           <Typography variant="body2" color="textSecondary" sx={{ color: 'black', fontSize: '16px', mt: 1 }}>
             {role === 'buyer' ? `Seller: ${sellerName}` : `Buyer: ${buyerName}`}

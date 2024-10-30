@@ -16,6 +16,8 @@ import TaskReviews from "./Components/Tasks/TaskReviews";
 import ReceiveBids from "./Components/Tasks/ReceiveBids";
 import ServiceLandingPage from "./Components/Services/ServiceLandingPage";
 import VerificationDialog from "./Components/User/verificaation";
+import Home from "./Components/Home";
+// import Chat from "./Components/Chat/Chat";
 
 // Protected Route component for authenticated users
 const ProtectedRoute = ({ children }) => {
@@ -58,6 +60,7 @@ function App() {
         <Route path="/task-reviews" element={<ProtectedRoute><TaskReviews /></ProtectedRoute>} />
         <Route path="/receive-bids" element={<ProtectedRoute><ReceiveBids /></ProtectedRoute>} />
         <Route path="/service/:id" element={<ProtectedRoute><ServiceLandingPage /></ProtectedRoute>} />
+        {/* <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} /> */}
 
 
         {/* Fallback Route for undefined paths */}
@@ -68,14 +71,14 @@ function App() {
 }
 
 // Home component (for when no specific path is matched)
-const Home = () => {
-  return (
-    <div >
-      <h1>Welcome to MyPlatform</h1>
-      <p>Outsource your tasks or offer services here!</p>
-    </div>
-  );
-};
+// const Home = () => {
+//   return (
+//     <div >
+//       <h1>Welcome to MyPlatform</h1>
+//       <p>Outsource your tasks or offer services here!</p>
+//     </div>
+//   );
+// };
 
 // Not Found component for undefined routes
 const NotFound = () => {

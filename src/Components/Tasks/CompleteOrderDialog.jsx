@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, CircularProgress, Grid } from '@mui/material';
+import React, { useState, useRef } from 'react';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, CircularProgress, Grid, Snackbar, Box, IconButton } from '@mui/material';
+import { Close as CloseIcon } from '@mui/icons-material';
 import axios from 'axios';
 
 const CompleteOrderDialog = ({ open, onClose, orderId, onCompleteSuccess }) => {
@@ -7,7 +8,10 @@ const CompleteOrderDialog = ({ open, onClose, orderId, onCompleteSuccess }) => {
   const [image, setImage] = useState(null);
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: '' });
+  
+  const imageInputRef = useRef(null);
+  const videoInputRef = useRef(null);
 
   const handleImageChange = (event) => {
     setImage(event.target.files[0]);
@@ -17,9 +21,20 @@ const CompleteOrderDialog = ({ open, onClose, orderId, onCompleteSuccess }) => {
     setVideo(event.target.files[0]);
   };
 
+  const handleRemoveImage = () => {
+    setImage(null);
+    if (imageInputRef.current) imageInputRef.current.value = '';  // Clear the input value
+  };
+
+  const handleRemoveVideo = () => {
+    setVideo(null);
+    if (videoInputRef.current) videoInputRef.current.value = '';  // Clear the input value
+  };
+
+  const handleSnackbarClose = () => setSnackbar({ ...snackbar, open: false });
+
   const handleSubmit = async () => {
     setLoading(true);
-    setError(null);
 
     const formData = new FormData();
     formData.append('work', work);
@@ -37,17 +52,14 @@ const CompleteOrderDialog = ({ open, onClose, orderId, onCompleteSuccess }) => {
           }
         }
       );
-      alert(response.data.message);
+      setSnackbar({ open: true, message: response.data.message, severity: 'success' });
       setLoading(false);
       onCompleteSuccess(orderId);
       onClose();
     } catch (err) {
       setLoading(false);
-      if (err.response) {
-        setError(err.response.data.message);
-      } else {
-        setError('Failed to complete the order');
-      }
+      const errorMessage = err.response ? err.response.data.message : 'Failed to complete the order';
+      setSnackbar({ open: true, message: errorMessage, severity: 'error' });
     }
   };
 
@@ -56,7 +68,7 @@ const CompleteOrderDialog = ({ open, onClose, orderId, onCompleteSuccess }) => {
       <DialogTitle>Complete Job Order</DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid item xs={12} sx={{ mt: 2 }}>
             <TextField
               label="Work Description"
               fullWidth
@@ -67,8 +79,11 @@ const CompleteOrderDialog = ({ open, onClose, orderId, onCompleteSuccess }) => {
               onChange={(e) => setWork(e.target.value)}
             />
           </Grid>
-          <Grid item xs={12}>
+          
+          {/* Image Upload and Preview */}
+          <Grid item xs={12} >
             <input
+              ref={imageInputRef}
               accept="image/*"
               type="file"
               onChange={handleImageChange}
@@ -76,14 +91,29 @@ const CompleteOrderDialog = ({ open, onClose, orderId, onCompleteSuccess }) => {
               id="image-upload"
             />
             <label htmlFor="image-upload">
-              <Button variant="outlined" color="primary" component="span">
+              <Button variant="outlined" color="black" component="span" fullWidth>
                 Upload Image (Optional)
               </Button>
             </label>
-            {image && <p>Selected Image: {image.name}</p>}
+            {image && (
+              <Box mt={2} display="flex" alignItems="center">
+                <Box
+                  component="img"
+                  src={URL.createObjectURL(image)}
+                  alt="Selected Image"
+                  sx={{ width: 100, height: 100, objectFit: 'cover', marginRight: 2 }}
+                />
+                <Button variant="outlined" color="secondary" onClick={handleRemoveImage}>
+                  Remove
+                </Button>
+              </Box>
+            )}
           </Grid>
-          <Grid item xs={12}>
+
+          {/* Video Upload and Preview */}
+          <Grid item xs={12} >
             <input
+              ref={videoInputRef}
               accept="video/*"
               type="file"
               onChange={handleVideoChange}
@@ -91,27 +121,51 @@ const CompleteOrderDialog = ({ open, onClose, orderId, onCompleteSuccess }) => {
               id="video-upload"
             />
             <label htmlFor="video-upload">
-              <Button variant="outlined" color="primary" component="span">
+              <Button variant="outlined" color="black" component="span" fullWidth>
                 Upload Video (Optional)
               </Button>
             </label>
-            {video && <p>Selected Video: {video.name}</p>}
+            {video && (
+              <Box mt={2} display="flex" alignItems="center">
+                <Box
+                  component="video"
+                  src={URL.createObjectURL(video)}
+                  alt="Selected Video"
+                  controls
+                  sx={{ width: 100, height: 100, objectFit: 'cover', marginRight: 2 }}
+                />
+                <Button variant="outlined" color="secondary" onClick={handleRemoveVideo}>
+                  Remove
+                </Button>
+              </Box>
+            )}
           </Grid>
+        
         </Grid>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
       </DialogContent>
+
       <DialogActions>
-        <Button onClick={onClose} color="secondary">
+        <Button onClick={onClose} variant='outlined' sx={{ color: 'red', borderColor: 'red'}}>
           Cancel
         </Button>
-        <Button
-          onClick={handleSubmit}
-          color="primary"
-          disabled={loading}
-        >
+        <Button onClick={handleSubmit} variant='contained' color="success" disabled={loading} sx={{  mr: 2 }}>
           {loading ? <CircularProgress size={24} /> : 'Complete Order'}
         </Button>
       </DialogActions>
+
+      {/* Snackbar for Success/Error Messages */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        message={snackbar.message}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        action={
+          <IconButton size="small" color="inherit" onClick={handleSnackbarClose}>
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      />
     </Dialog>
   );
 };
