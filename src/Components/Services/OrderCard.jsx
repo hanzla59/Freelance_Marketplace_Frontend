@@ -103,11 +103,11 @@ const OrderCard = ({ order }) => {
                                     <>
                                         {isSeller && (
                                             <>
-                                                <Button variant="contained" color="success" sx={{ mr: 1 }} onClick={handleCompleteOrderClick}>
-                                                    Complete Order
-                                                </Button>
                                                 <Button variant="outlined" color="error" onClick={() => handleCancelOrder(order._id)}>
                                                     Cancel Order
+                                                </Button>
+                                                <Button variant="contained" color="success" sx={{ ml: 1 }} onClick={handleCompleteOrderClick}>
+                                                    Complete Order
                                                 </Button>
                                             </>
                                         )}

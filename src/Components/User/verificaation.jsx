@@ -45,8 +45,7 @@ const VerificationDialog = () => {
         alert(`${errorMessage}`);
       } else {
         alert("Verification failed: An unexpected error occurred");
-      }
-      console.error("Error during verification:", error); 
+      } 
     } finally {
       setLoading(false);
     }

@@ -35,6 +35,8 @@ const MyServiceCard = ({ service, onServiceDelete }) => {
         onServiceDelete();
       })
       .catch((error) => {
+        //use snackbar to show error message
+        alert(error.response.data.message);
         console.error('Error deleting service:', error);
       });
   };

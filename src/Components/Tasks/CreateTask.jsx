@@ -67,7 +67,7 @@ const CreateTask = () => {
         } catch (error) {
             setLoading(false); // Stop loading on error
             const errorMessage = error.response ? error.response.data.message : "An unexpected error occurred";
-            setSnackbar({ open: true, message: `Error: ${errorMessage}` });
+            setSnackbar({ open: true, message: `${errorMessage}` });
         }
     };
 

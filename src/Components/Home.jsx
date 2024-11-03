@@ -12,6 +12,7 @@ import clock from '../assets/images/clock.png';
 import email from '../assets/images/email.png';
 import graphicdesign from '../assets/images/graphic-design.png';
 
+
 const LandingServiceCart = (props) => {
     return (
         <div>
@@ -29,13 +30,26 @@ const LandingServiceCart = (props) => {
 }
 
 export default function Home() {
+    const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
+    React.useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
     return (
         <>
             <div style={{
                 display: 'flex',
-                padding: '20px',
+                flexDirection: windowWidth < 768 ? 'column' : 'row-reverse',
+                padding:windowWidth < 768 ? '0px':'20px',
                 maxWidth: '100%',
-            }}>
+                
+            }} >
+                <img
+                    src={mainimage}
+                    alt="Main"
+                    style={{ width: '100%', maxWidth: '600px', borderRadius: '10px', boxShadow: '1px 1px 5px gray', margin: '20px' }}
+                />
                 <div style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -45,12 +59,12 @@ export default function Home() {
                     width: '100%',
                     maxWidth: '1200px',
                 }}>
-                    <h1 style={{ fontSize: '4rem', color: 'rgb(21, 107, 0)', marginBottom: '0px' }}>Task Overloaded?</h1>
+                    <h1 style={{ fontSize: '4rem', color: 'rgb(21, 107, 0)', marginBottom: '0px', marginTop:windowWidth < 768 ? '5px':''  }}>Task Overloaded?</h1>
                     <p style={{ fontSize: '2rem', marginBottom: '20px' }}>Outsource and Thrive</p>
                     <div style={{
                         display: 'flex',
                         alignItems: 'center',
-                        padding: '10px 15px',
+                        padding:windowWidth < 768 ?'4px': '10px 15px',
                         border: '2px solid black',
                         borderRadius: '4px',
                         marginBottom: '20px',
@@ -79,11 +93,6 @@ export default function Home() {
                         Discover Talented Professionals Offering Both Physical and Digital Services on Easy Life
                     </span>
                 </div>
-                <img
-                    src={mainimage}
-                    alt="Main"
-                    style={{ width: '100%', maxWidth: '600px', borderRadius: '10px', boxShadow: '1px 1px 5px gray', margin: '20px' }}
-                />
             </div>
 
             <div style={{ margin: '20px 0px', padding: '10px', textAlign: 'center' }}>
@@ -94,6 +103,7 @@ export default function Home() {
                         margin: '20px 0px',
                         marginBottom: '70px',
                         fontSize: '3rem', // Adjusted for responsiveness
+                        marginTop:windowWidth < 768 ? '0px': '',
                     }}>
                         You can get the following Services <br />On Our Platform
                     </h1>
@@ -162,4 +172,13 @@ export default function Home() {
         </>
     );
 }
+
+
+
+
+
+
+
+
+
 

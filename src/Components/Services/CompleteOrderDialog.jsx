@@ -113,7 +113,7 @@ const CompleteOrderDialog = ({ open, onClose, order, onOrderDelivered }) => {
             sx={{ mb: 2, mt: 1 }}
           />
           <Box sx={{ display: 'flex', mt: 2 }}>
-            <Button variant="contained" component="label" fullWidth startIcon={<AddPhotoAlternateIcon />}>
+            <Button variant="outlined" color="black" component="label" fullWidth startIcon={<AddPhotoAlternateIcon />}>
               Upload Image
               <input hidden accept="image/*" multiple type="file" onChange={handleImageUpload} />
             </Button>
@@ -136,7 +136,7 @@ const CompleteOrderDialog = ({ open, onClose, order, onOrderDelivered }) => {
             ))}
           </Box>
           <Box sx={{ display: 'flex', mt: 2 }}>
-            <Button variant="contained" component="label" fullWidth startIcon={<VideoLibraryIcon />}>
+            <Button variant="outlined" color="black" component="label" fullWidth startIcon={<VideoLibraryIcon />}>
               Upload Video
               <input hidden accept="video/*" multiple type="file" onChange={handleVideoUpload} />
             </Button>
@@ -167,10 +167,10 @@ const CompleteOrderDialog = ({ open, onClose, order, onOrderDelivered }) => {
             onClick={handleOrderDelivered}
             color="primary"
             variant="contained"
-            sx={{ mr: 2 }}
+            sx={{ mr: 2, backgroundColor: 'green' }}
             disabled={loading} // Disable the button while loading
           >
-            {loading ? <CircularProgress size={24} color="inherit" /> : 'Order Delivered'}
+            {loading ? <CircularProgress size={24}  /> : 'Order Delivered'}
           </Button>
         </DialogActions>
       </Dialog>

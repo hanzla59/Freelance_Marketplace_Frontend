@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./Components/Navbar/Navbar";
 import Tasks from "./Components/Tasks/Tasks";
 import Services from "./Components/Services/Services";
@@ -11,78 +11,70 @@ import Login from "./Components/User/Login";
 import Signup from "./Components/User/Signup";
 import UpdateProfile from "./Components/User/UpdateProfile";
 import MyServices from "./Components/Services/MyServices";
-import MyTasks from "./Components//Tasks/MyTasks";
+import MyTasks from "./Components/Tasks/MyTasks";
 import TaskReviews from "./Components/Tasks/TaskReviews";
 import ReceiveBids from "./Components/Tasks/ReceiveBids";
 import ServiceLandingPage from "./Components/Services/ServiceLandingPage";
 import VerificationDialog from "./Components/User/verificaation";
 import Home from "./Components/Home";
-// import Chat from "./Components/Chat/Chat";
-
-// Protected Route component for authenticated users
-const ProtectedRoute = ({ children }) => {
-
-  const isAuthenticated = true;
-  // const isAuthenticated = Boolean(localStorage.getItem("token"));
-  
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
-  }
-  return children;
-};
+import Admin from "./Components/Admin/Admin";
+import ComplainDialog from './Components/User/ComplainDialog';
+import ComplainsList from "./Components/User/ComplainsList";
+import DeleteAccount from "./Components/User/DeleteAccount";
 
 function App() {
+  const location = useLocation(); // Use useLocation to get the current path
+
   return (
-    <Router >
-      {/* Navbar will be visible on all routes */}
-      <Navbar />
+    <>
+      {/* Conditionally render Navbar only if not on the /admin route */}
+      {location.pathname !== '/admin' && <Navbar />}
 
       {/* Routes for different pages */}
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Home  />} />
+        <Route path="/" element={<Home />} />
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/services" element={<Services />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        
-        {/* Protected Routes (for logged-in users only) */}
-        <Route path="/create-task" element={<ProtectedRoute><CreateTask /></ProtectedRoute>} />
-        <Route path="/create-service" element={<ProtectedRoute><CreateService /></ProtectedRoute>} />
-        <Route path="/task-orders" element={<ProtectedRoute><TaskOrders /></ProtectedRoute>} />
-        <Route path="/service-orders" element={<ProtectedRoute><ServiceOrders /></ProtectedRoute>} />
-        <Route path="/update-profile" element={<ProtectedRoute><UpdateProfile /></ProtectedRoute>} />
-        <Route path="/verify-account" element={<ProtectedRoute><VerificationDialog /></ProtectedRoute>} />
-        
-        {/* Conditional Routes based on User Role */}
-        <Route path="/my-services" element={<ProtectedRoute><MyServices /></ProtectedRoute>} />
-        <Route path="/my-tasks" element={<ProtectedRoute><MyTasks /></ProtectedRoute>} />
-        <Route path="/task-reviews" element={<ProtectedRoute><TaskReviews /></ProtectedRoute>} />
-        <Route path="/receive-bids" element={<ProtectedRoute><ReceiveBids /></ProtectedRoute>} />
-        <Route path="/service/:id" element={<ProtectedRoute><ServiceLandingPage /></ProtectedRoute>} />
-        {/* <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} /> */}
 
+        {/* Routes previously protected */}
+        <Route path="/create-task" element={<CreateTask />} />
+        <Route path="/create-service" element={<CreateService />} />
+        <Route path="/task-orders" element={<TaskOrders />} />
+        <Route path="/service-orders" element={<ServiceOrders />} />
+        <Route path="/update-profile" element={<UpdateProfile />} />
+        <Route path="/verify-account" element={<VerificationDialog />} />
+        <Route path="/complain" element={<><ComplainDialog /><ComplainsList /></>} />
+        <Route path="/delete-account" element={<DeleteAccount />} />
+
+        {/* Conditional Routes based on User Role */}
+        <Route path="/my-services" element={<MyServices />} />
+        <Route path="/my-tasks" element={<MyTasks />} />
+        <Route path="/task-reviews" element={<TaskReviews />} />
+        <Route path="/receive-bids" element={<ReceiveBids />} />
+        <Route path="/service/:id" element={<ServiceLandingPage />} />
+        {/* <Route path="/chat" element={<Chat />} /> */}
+
+        {/* Routes for Admin */}
+        <Route path="/admin" element={<Admin />} />
 
         {/* Fallback Route for undefined paths */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </Router>
+    </>
   );
 }
 
-// Home component (for when no specific path is matched)
-// const Home = () => {
-//   return (
-//     <div >
-//       <h1>Welcome to MyPlatform</h1>
-//       <p>Outsource your tasks or offer services here!</p>
-//     </div>
-//   );
-// };
-
-// Not Found component for undefined routes
 const NotFound = () => {
   return <h2>404 - Page Not Found</h2>;
 };
 
-export default App;
+export default function WrappedApp() {
+  return (
+    <Router>
+      <App />
+    </Router>
+  );
+}

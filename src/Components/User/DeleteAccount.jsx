@@ -34,7 +34,7 @@ const DeleteAccount = () => {
             alert(data.message);
             localStorage.clear();
             setOpen(false);
-            // Add any additional actions here after successful deletion, like logging out the user
+            window.location.reload();
         } catch (error) {
             console.error("Error deleting account:", error);
             alert("Account deletion failed: " + error.response.data.message);

@@ -1,0 +1,91 @@
+form {
+    padding: 40px 20px;
+    box-shadow: 2px 2px 5px gray;
+    margin-top: 70px;
+    border-radius: 8px;
+}
+
+form > h1, input, button {
+    margin: 0px;
+    padding: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+form > h1 {
+    margin-bottom: 20px;
+}
+form > input , button {
+    font-size: 22px;
+    padding: 8px;
+    margin: 8px 0px;
+}
+form > button {
+    cursor: pointer;
+    border: none;
+    background-color: goldenrod;
+}
+.admin {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.admin>.left {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    box-shadow: 1px 1px 5px gray;
+    overflow-y: auto;
+    background-color: rgb(36, 36, 36);
+    color: white;
+    padding: 15px 10px;
+    padding-bottom: 40px;
+    border-radius: 5px;
+    /* to set the maximum background */
+    /* align-self: flex-start; */ 
+}
+.admin>.left > .adminboard > h2 {
+    box-shadow: 1px 1px 3px gray;
+    margin: 6px 0px;
+    padding: 7px;
+    border-radius: 3px;
+    color: white;
+}
+.admin>.left > .adminboard > p {
+    box-shadow: 1px 1px 3px gray;
+    margin: 6px 0px;
+    padding: 7px;
+    border-radius: 3px;
+    color: white;
+}
+.admin > .left > div > p:hover { cursor: pointer; background-color: white; color: black;}
+.admin > .left > span {
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.selectcontainer {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.selectcontainer select {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    display: block;
+}
+
+.selectcontainer select:focus {
+    outline: 2px solid #007bff;
+}
+
+.admin>.right {
+    width: 75%;
+}

@@ -20,7 +20,6 @@ const TaskOrders = () => {
                     },
                 });
                 setOrders(response.data.orders);
-                console.log(response.data.orders);
                 setLoading(false);
             } catch (err) {
                 setError('Failed to fetch orders');
