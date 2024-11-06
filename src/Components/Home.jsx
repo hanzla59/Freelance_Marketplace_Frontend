@@ -124,18 +124,7 @@ export default function Home() {
                         <LandingServiceCart image={carpenter} heading='Carpentry' text='From furniture to custom woodworking projects, our skilled carpenters bring craftsmanship and quality to every job.' />
                     </div>
 
-                    <style jsx>{`
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 2.5rem; // Smaller font size on smaller screens
-      }
-    }
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 2rem; // Even smaller font size on extra small screens
-      }
-    }
-  `}</style>
+                    
                 </div>
 
             </div>

@@ -277,6 +277,7 @@ const ServiceLandingPage = () => {
             <TextField
               label="Your Offered Price"
               value={price}
+              type="number"
               onChange={(e) => setPrice(e.target.value)}
               fullWidth
               sx={{ mt: 3 }}

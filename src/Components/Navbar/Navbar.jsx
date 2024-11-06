@@ -55,14 +55,14 @@ const Navbar = () => {
                                     <AccountCircle />
                                 </IconButton>
                             ) : (
-                                <Typography variant="h6" sx={{ textDecoration: "none", color: "inherit" }} component={Link} to="/">
+                                <Typography variant="h6" sx={{ textDecoration: "none", color: "inherit", border: "2px solid green", padding: "0.5px 10px", borderRadius: "5px", ":hover": { backgroundColor: "green", color: "white" } }} component={Link} to="/">
                                     Easy Life
                                 </Typography>
                             )}
                         </>
                     ) : (
                         <>
-                            <Typography variant="h6" component={Link} to="/" onClick={handleLogoClick} sx={{ textDecoration: "none", color: "inherit" }}>
+                            <Typography variant="h6" component={Link} to="/" onClick={handleLogoClick} sx={{ textDecoration: "none", color: "inherit", border: "2px solid green", padding: "0.5px 10px", borderRadius: "5px", ":hover": { backgroundColor: "green", color: "white" } }}>
                                 Easy Life
                             </Typography>
                             <div>

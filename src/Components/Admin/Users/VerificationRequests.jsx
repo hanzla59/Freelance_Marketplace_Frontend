@@ -2,28 +2,34 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import axios from 'axios';
 
-const VerificationRequestCard = ({ request, openDialog }) => (
-    <Card sx={{ display: 'flex', flexDirection: 'row', p: 2, mb: 2, width: '100%', maxWidth: '100%', borderRadius: '8px', boxShadow: 3, border: '1px solid black' }}>
-        <CardContent sx={{ flex: 1 }}>
-            <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '22px' }}>Username: {request.user.username}</Typography>
-            <Typography variant="body2" color="textSecondary" sx={{ mt: 2, fontSize: '16px' }}>
-                Verification Request Date: {new Date(request.createdAt).toLocaleDateString()}
-            </Typography>
-        </CardContent>
-        <CardContent sx={{ flex: 1, textAlign: 'right' }}>
-            <Typography variant="subtitle2" sx={{ fontSize: '16px' }}>CNIC: {request.user.cnic}</Typography>
-            {request.status === "pending" && (
-                <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={() => openDialog(request)}>
-                    Open Request
-                </Button>
-            ) || (
+const VerificationRequestCard = ({ request, openDialog }) => {
+    const username = request.user ? request.user.username : 'Unknown User';
+    const cnic = request.user ? request.user.cnic : 'N/A';
+
+    return (
+        <Card sx={{ display: 'flex', flexDirection: 'row', p: 2, mb: 2, width: '100%', maxWidth: '100%', borderRadius: '8px', boxShadow: 3, border: '1px solid black' }}>
+            <CardContent sx={{ flex: 1 }}>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', fontSize: '22px' }}>Username: {username}</Typography>
                 <Typography variant="body2" color="textSecondary" sx={{ mt: 2, fontSize: '16px' }}>
-                    Status: {request.status}
+                    Verification Request Date: {new Date(request.createdAt).toLocaleDateString()}
                 </Typography>
-            )}
-        </CardContent>
-    </Card>
-);
+            </CardContent>
+            <CardContent sx={{ flex: 1, textAlign: 'right' }}>
+                <Typography variant="subtitle2" sx={{ fontSize: '16px' }}>CNIC: {cnic}</Typography>
+                {request.status === "pending" ? (
+                    <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={() => openDialog(request)}>
+                        Open Request
+                    </Button>
+                ) : (
+                    <Typography variant="body2" color="textSecondary" sx={{ mt: 2, fontSize: '16px' }}>
+                        Status: {request.status}
+                    </Typography>
+                )}
+            </CardContent>
+        </Card>
+    );
+};
+
 
 const VerificationRequests = () => {
     const [requests, setRequests] = useState([]);
