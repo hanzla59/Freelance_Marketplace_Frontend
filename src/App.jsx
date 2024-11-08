@@ -22,6 +22,7 @@ import ComplainDialog from './Components/User/ComplainDialog';
 import ComplainsList from "./Components/User/ComplainsList";
 import DeleteAccount from "./Components/User/DeleteAccount";
 import UpdateService from "./Components/Services/UpdateService";
+import Chat from "./Components/Chat/Chat";
 
 function App() {
   const location = useLocation(); // Use useLocation to get the current path
@@ -57,7 +58,7 @@ function App() {
         <Route path="/receive-bids" element={<ReceiveBids />} />
         <Route path="/service/:id" element={<ServiceLandingPage />} />
         <Route path="/update-service/:id" element={<UpdateService />} />
-        {/* <Route path="/chat" element={<Chat />} /> */}
+        <Route path="/chat" element={<Chat />} />
 
         {/* Routes for Admin */}
         <Route path="/admin" element={<Admin />} />

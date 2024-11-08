@@ -35,6 +35,7 @@ const Navbar = () => {
         localStorage.removeItem("role");
         localStorage.removeItem("username");
         localStorage.removeItem("auth");
+        localStorage.removeItem("userId");
         setIsLoggedIn(false);
         navigate("/");
     };
@@ -80,6 +81,7 @@ const Navbar = () => {
                                     <>
                                         <Button color="inherit" component={Link} to="/task-orders">Task Orders</Button>
                                         <Button color="inherit" component={Link} to="/service-orders">Service Orders</Button>
+                                        <Button color="inherit" component={Link} to="/chat">Messages</Button>
                                     </>
                                 )}
                             </div>
@@ -156,8 +158,8 @@ const Navbar = () => {
                                     <ListItem component={Link} to="/service-orders" onClick={handleDrawerToggle}>
                                         <ListItemText primary="Service Orders" />
                                     </ListItem>
-                                    <ListItem component={Link} to="/verify-account" onClick={handleDrawerToggle}>
-                                        <ListItemText primary="Verify Account" />
+                                    <ListItem component={Link} to="/chat" onClick={handleDrawerToggle}>
+                                        <ListItemText primary="Messages" />
                                     </ListItem>
 
                                 </>

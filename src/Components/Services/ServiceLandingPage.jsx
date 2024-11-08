@@ -11,7 +11,7 @@ import {
   CardMedia,
   IconButton,
   Snackbar,
-  Alert
+  Alert, Dialog, DialogActions, DialogContent, DialogTitle,
 } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -32,7 +32,7 @@ const ArrowButton = styled(IconButton)(({ theme }) => ({
 }));
 
 const ServiceLandingPage = () => {
-  const { id } = useParams(); // Get the service ID from the URL
+  const { id } = useParams();
   const [service, setService] = useState(null);
   const [serviceReviews, setServiceReviews] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -40,6 +40,14 @@ const ServiceLandingPage = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [openMessageDialog, setOpenMessageDialog] = useState(false);
+  const [message, setMessage] = useState('');
+  const [currentBid, setCurrentBid] = useState(null);
+  const [roomId, setRoomId] = useState(null); // To store the room ID
 
   // Input from buyer to place order
   const [price, setPrice] = useState('');
@@ -50,6 +58,58 @@ const ServiceLandingPage = () => {
     requirements: false,
     location: false
   });
+
+  const handleMessageClick = async (service) => {
+    // setCurrentBid(bid);
+    const senderId = localStorage.getItem('userId');
+    const receiverId = service.seller._id;
+
+    // Check if a room already exists or create one
+    try {
+      const response = await axios.post('http://localhost:5000/fyp/rooms', {
+        user1: senderId,
+        user2: receiverId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      setRoomId(response.data.roomId);
+      setOpenMessageDialog(true);
+    } catch (error) {
+      setErrorMessage('Failed to create or join room');
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!message.trim()) {
+      setErrorMessage('Message cannot be empty');
+      return;
+    }
+
+    try {
+      const senderId = localStorage.getItem('userId');
+      const receiverId = currentBid?.seller?._id;
+
+      const response = await axios.post('http://localhost:5000/fyp/sendMessage', {
+        roomId, // Send the room ID with the message
+        senderId,
+        receiverId,
+        message,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      setSuccessMessage('Message sent successfully');
+      setOpenMessageDialog(false);
+      setMessage('');
+    } catch (error) {
+      setErrorMessage('Failed to send message');
+    }
+  };
 
   // Fetch the service details and reviews based on the service ID
   useEffect(() => {
@@ -284,8 +344,16 @@ const ServiceLandingPage = () => {
               error={errors.price}
               helperText={errors.price && "This field is required"}
             />
-            <Button variant="contained" sx={{ mt: 3 }} onClick={handlePlaceOrder}>
+            <Button variant="contained" sx={{ mt: 3, backgroundColor: 'green' }} onClick={handlePlaceOrder}>
               Place Order
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleMessageClick(service)}
+              style={{marginTop: '22px', marginLeft: '10px', backgroundColor: 'black'}}
+            >
+              Message
             </Button>
           </Box>
         </Box>
@@ -310,6 +378,34 @@ const ServiceLandingPage = () => {
           )}
         </Box>
       </Grid>
+      {/* Message Dialog */}
+      <Dialog open={openMessageDialog} onClose={() => setOpenMessageDialog(false)}>
+        <DialogTitle>Send Message</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="message"
+            label="Message"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            multiline
+            rows={4}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenMessageDialog(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleSendMessage} color="primary">
+            Send
+          </Button>
+        </DialogActions>
+      </Dialog>
+
 
     </Grid>
   );
