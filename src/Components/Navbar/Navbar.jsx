@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     AppBar,
     Toolbar,
@@ -17,17 +17,28 @@ import { Menu as MenuIcon, AccountCircle } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { useMediaQuery, useTheme } from "@mui/material";
 
-const Navbar = () => {
+const Navbar = ({ isLoggedIn, setIsLoggedIn}) => {
     const navigate = useNavigate();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const [activePage, setActivePage] = useState("");
     const [anchorEl, setAnchorEl] = useState(null);
     const [mobileOpen, setMobileOpen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token")); // Set initial state based on token presence
     const isMenuOpen = Boolean(anchorEl);
     const [role, setRole] = useState(localStorage.getItem("role"));
-
+    
+    // const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token")); // Set initial state based on token presence
+    // let role
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        setRole(localStorage.getItem("role"));
+        if (token) {
+            setIsLoggedIn(true);
+        } else {
+            setIsLoggedIn(false);
+        }
+    }, [isLoggedIn]);
+    
     const handleProfileMenuOpen = (event) => setAnchorEl(event.currentTarget);
     const handleMenuClose = () => setAnchorEl(null);
     const handleLogout = () => {

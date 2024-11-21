@@ -1,12 +1,77 @@
 import React from 'react';
 import { Card, Box, Typography, Button, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import axios from 'axios';
+import { useState } from 'react';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Snackbar, Alert } from '@mui/material';
 
-const ReceivedBidCard = ({ proposal, location, bid, job,  status, onAccept, onReject }) => {
+const ReceivedBidCard = ({ proposal, location, bid, job,  status, onAccept, onReject, sellerId }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [openMessageDialog, setOpenMessageDialog] = useState(false);
+  const [message, setMessage] = useState('');
+  const [currentBid, setCurrentBid] = useState(null);
+  const [roomId, setRoomId] = useState(null); // To store the room ID
+
+
+  const handleMessageClick = async (sellerId) => {
+    const senderId = localStorage.getItem('userId');
+    const receiverId = sellerId;
+
+    // Check if a room already exists or create one
+    try {
+      const response = await axios.post('http://localhost:5000/fyp/rooms', {
+        user1: senderId,
+        user2: receiverId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      setRoomId(response.data.roomId);
+      setOpenMessageDialog(true);
+    } catch (error) {
+      setErrorMessage('Failed to create or join room');
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!message.trim()) {
+      setErrorMessage('Message cannot be empty');
+      return;
+    }
+
+    try {
+      const senderId = localStorage.getItem('userId');
+      const receiverId = sellerId;
+
+      const response = await axios.post('http://localhost:5000/fyp/sendMessage', {
+        roomId, 
+        senderId,
+        receiverId,
+        message,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      setSuccessMessage('Message sent successfully');
+      setOpenMessageDialog(false);
+      setMessage('');
+    } catch (error) {
+      setErrorMessage('Failed to send message');
+      console.error(error);
+    }
+  };
+
   return (
+    <>
     <Card sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', padding: 2, boxShadow: 3, border: '2px solid green' }}>
       {/* Left side: Proposal and Location */}
       <Box flex={2} sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -30,6 +95,13 @@ const ReceivedBidCard = ({ proposal, location, bid, job,  status, onAccept, onRe
         {/* Status or Accept/Reject Buttons */}
         {status === 'submitted' ? (
           <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+            <Button 
+              variant="contained"  
+              onClick={() => handleMessageClick(sellerId)} 
+              style={{ color: 'white', backgroundColor: 'black'}}
+            >
+              Message
+            </Button>
             <Button variant="contained" color="success" onClick={onAccept}>
               Accept
             </Button>
@@ -39,11 +111,63 @@ const ReceivedBidCard = ({ proposal, location, bid, job,  status, onAccept, onRe
           </Box>
         ) : (
           <Typography variant="body2" color="textSecondary" sx={{ marginTop: 1 }}>
+            <Button 
+              variant="contained" 
+              
+              onClick={() => handleMessageClick(sellerId)} 
+              style={{ marginRight:'10px', color: 'white', backgroundColor: 'black'}}
+            >
+              Message
+            </Button>
             {status}
           </Typography>
         )}
       </Box>
     </Card>
+
+
+    {/* Snackbar for success message */}
+    <Snackbar open={!!successMessage} autoHideDuration={6000} onClose={() => setSuccessMessage('')}>
+        <Alert onClose={() => setSuccessMessage('')} severity="success" sx={{ width: '100%' }}>
+          {successMessage}
+        </Alert>
+      </Snackbar>
+
+      {/* Snackbar for error message */}
+      <Snackbar open={!!errorMessage} autoHideDuration={6000} onClose={() => setErrorMessage('')}>
+        <Alert onClose={() => setErrorMessage('')} severity="error" sx={{ width: '100%' }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
+
+      {/* Message Dialog */}
+      <Dialog open={openMessageDialog} onClose={() => setOpenMessageDialog(false)}>
+        <DialogTitle>Send Message</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="message"
+            label="Message"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            multiline
+            rows={4}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenMessageDialog(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleSendMessage} color="primary">
+            Send
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 

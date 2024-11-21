@@ -172,57 +172,57 @@ const ReceivedBids = () => {
   };
 
   //use useeffect to fetch 
-  const handleMessageClick = async (bid) => {
-    setCurrentBid(bid);
-    const senderId = localStorage.getItem('userId');
-    const receiverId = bid.seller._id;
+  // const handleMessageClick = async (bid) => {
+  //   setCurrentBid(bid);
+  //   const senderId = localStorage.getItem('userId');
+  //   const receiverId = bid.seller._id;
 
-    // Check if a room already exists or create one
-    try {
-      const response = await axios.post('http://localhost:5000/fyp/rooms', {
-        user1: senderId,
-        user2: receiverId,
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+  //   // Check if a room already exists or create one
+  //   try {
+  //     const response = await axios.post('http://localhost:5000/fyp/rooms', {
+  //       user1: senderId,
+  //       user2: receiverId,
+  //     }, {
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //       },
+  //     });
 
-      setRoomId(response.data.roomId);
-      setOpenMessageDialog(true);
-    } catch (error) {
-      setErrorMessage('Failed to create or join room');
-    }
-  };
+  //     setRoomId(response.data.roomId);
+  //     setOpenMessageDialog(true);
+  //   } catch (error) {
+  //     setErrorMessage('Failed to create or join room');
+  //   }
+  // };
 
-  const handleSendMessage = async () => {
-    if (!message.trim()) {
-      setErrorMessage('Message cannot be empty');
-      return;
-    }
+  // const handleSendMessage = async () => {
+  //   if (!message.trim()) {
+  //     setErrorMessage('Message cannot be empty');
+  //     return;
+  //   }
 
-    try {
-      const senderId = localStorage.getItem('userId');
-      const receiverId = currentBid?.seller?._id;
+  //   try {
+  //     const senderId = localStorage.getItem('userId');
+  //     const receiverId = currentBid?.seller?._id;
 
-      const response = await axios.post('http://localhost:5000/fyp/sendMessage', {
-        roomId, // Send the room ID with the message
-        senderId,
-        receiverId,
-        message,
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+  //     const response = await axios.post('http://localhost:5000/fyp/sendMessage', {
+  //       roomId, // Send the room ID with the message
+  //       senderId,
+  //       receiverId,
+  //       message,
+  //     }, {
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //       },
+  //     });
 
-      setSuccessMessage('Message sent successfully');
-      setOpenMessageDialog(false);
-      setMessage('');
-    } catch (error) {
-      setErrorMessage('Failed to send message');
-    }
-  };
+  //     setSuccessMessage('Message sent successfully');
+  //     setOpenMessageDialog(false);
+  //     setMessage('');
+  //   } catch (error) {
+  //     setErrorMessage('Failed to send message');
+  //   }
+  // };
 
   if (loading) {
     return <CircularProgress />;
@@ -243,37 +243,38 @@ const ReceivedBids = () => {
               bid={bid.bid}
               job={bid.job.title}
               status={bid.status}
+              sellerId={bid.seller._id}
               onAccept={() => handleAccept(bid._id)}
               onReject={() => handleReject(bid._id)}
             />
-            <Button 
+            {/* <Button 
               variant="contained" 
               color="primary" 
               onClick={() => handleMessageClick(bid)} 
               style={{ marginTop: '10px' }}
             >
               Message
-            </Button>
+            </Button> */}
           </Grid>
         ))}
       </Grid>
 
       {/* Snackbar for success message */}
-      <Snackbar open={!!successMessage} autoHideDuration={6000} onClose={() => setSuccessMessage('')}>
+      {/* <Snackbar open={!!successMessage} autoHideDuration={6000} onClose={() => setSuccessMessage('')}>
         <Alert onClose={() => setSuccessMessage('')} severity="success" sx={{ width: '100%' }}>
           {successMessage}
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
 
       {/* Snackbar for error message */}
-      <Snackbar open={!!errorMessage} autoHideDuration={6000} onClose={() => setErrorMessage('')}>
+      {/* <Snackbar open={!!errorMessage} autoHideDuration={6000} onClose={() => setErrorMessage('')}>
         <Alert onClose={() => setErrorMessage('')} severity="error" sx={{ width: '100%' }}>
           {errorMessage}
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
 
       {/* Message Dialog */}
-      <Dialog open={openMessageDialog} onClose={() => setOpenMessageDialog(false)}>
+      {/* <Dialog open={openMessageDialog} onClose={() => setOpenMessageDialog(false)}>
         <DialogTitle>Send Message</DialogTitle>
         <DialogContent>
           <TextField
@@ -298,7 +299,7 @@ const ReceivedBids = () => {
             Send
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </>
   );
 };

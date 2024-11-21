@@ -14,7 +14,7 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 
-function ComplainDialog() {
+function ComplainDialog({ setComplainsSent }) {
     const [open, setOpen] = useState(false);
     const [username, setUsername] = useState('');
     const [complain, setComplain] = useState('');
@@ -62,6 +62,9 @@ function ComplainDialog() {
                 },
             });
             setSnackbarMessage(response.data.message);
+            setComplainsSent((prevComplainsSent) => prevComplainsSent + 1);
+            setComplain('');
+            setUsername('');
             setSnackbarOpen(true);
             handleClose();
         } catch (error) {
@@ -138,7 +141,7 @@ function ComplainDialog() {
             </Dialog>
             <Snackbar
                 open={snackbarOpen}
-                autoHideDuration={6000}
+                autoHideDuration={4000}
                 onClose={handleSnackbarClose}
                 message={snackbarMessage}
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}

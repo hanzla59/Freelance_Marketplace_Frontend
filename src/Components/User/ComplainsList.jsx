@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Box, Typography, Paper } from '@mui/material';
 
-function ComplainsList() {
+function ComplainsList({ complainsSent }) {
     const [complains, setComplains] = useState([]);
     const [loading, setLoading] = useState(true);
-
+   
     useEffect(() => {
         const fetchComplains = async () => {
             try {
@@ -23,7 +23,7 @@ function ComplainsList() {
         };
 
         fetchComplains();
-    }, []);
+    }, [complainsSent]);
 
     if (loading) {
         return <Typography>Loading...</Typography>;

@@ -90,7 +90,8 @@ const ServiceLandingPage = () => {
 
     try {
       const senderId = localStorage.getItem('userId');
-      const receiverId = currentBid?.seller?._id;
+      // const receiverId = currentBid?.seller?._id;
+      const receiverId = service.seller._id;
 
       const response = await axios.post('http://localhost:5000/fyp/sendMessage', {
         roomId, // Send the room ID with the message
@@ -405,6 +406,19 @@ const ServiceLandingPage = () => {
           </Button>
         </DialogActions>
       </Dialog>
+      {/* Snackbar for success message */}
+      <Snackbar open={!!successMessage} autoHideDuration={6000} onClose={() => setSuccessMessage('')}>
+        <Alert onClose={() => setSuccessMessage('')} severity="success" sx={{ width: '100%' }}>
+          {successMessage}
+        </Alert>
+      </Snackbar>
+
+      {/* Snackbar for error message */}
+      <Snackbar open={!!errorMessage} autoHideDuration={6000} onClose={() => setErrorMessage('')}>
+        <Alert onClose={() => setErrorMessage('')} severity="error" sx={{ width: '100%' }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
 
 
     </Grid>

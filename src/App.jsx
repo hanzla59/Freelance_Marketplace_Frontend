@@ -24,13 +24,19 @@ import DeleteAccount from "./Components/User/DeleteAccount";
 import UpdateService from "./Components/Services/UpdateService";
 import Chat from "./Components/Chat/Chat";
 
+import { useState } from "react";
+
 function App() {
   const location = useLocation(); // Use useLocation to get the current path
+
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token")); 
+  const [complainsSent, setComplainsSent] = useState([]);
+  
 
   return (
     <>
       {/* Conditionally render Navbar only if not on the /admin route */}
-      {location.pathname !== '/admin' && <Navbar />}
+      {location.pathname !== '/admin' && <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}  />}
 
       {/* Routes for different pages */}
       <Routes>
@@ -38,8 +44,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/services" element={<Services />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
+        <Route path="/signup" element={<Signup isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
 
         {/* Routes previously protected */}
         <Route path="/create-task" element={<CreateTask />} />
@@ -48,7 +54,7 @@ function App() {
         <Route path="/service-orders" element={<ServiceOrders />} />
         <Route path="/update-profile" element={<UpdateProfile />} />
         <Route path="/verify-account" element={<VerificationDialog />} />
-        <Route path="/complain" element={<><ComplainDialog /><ComplainsList /></>} />
+        <Route path="/complain" element={<><ComplainDialog setComplainsSent={setComplainsSent} /><ComplainsList complainsSent={complainsSent} /></>} />
         <Route path="/delete-account" element={<DeleteAccount />} />
 
         {/* Conditional Routes based on User Role */}

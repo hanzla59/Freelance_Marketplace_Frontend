@@ -30,10 +30,7 @@ export default function ServiceOrders() {
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ mb: 2 }}>
-        Your Orders
-      </Typography>
-
+      
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
           <CircularProgress />
@@ -43,7 +40,7 @@ export default function ServiceOrders() {
       ) : orders.length > 0 ? (
         orders.map((order) => <OrderCard key={order._id} order={order} />)
       ) : (
-        <Typography>No orders found.</Typography>
+        <Typography variant="h6">No orders found.</Typography>
       )}
     </Box>
   );

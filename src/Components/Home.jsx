@@ -90,7 +90,7 @@ export default function Home() {
                         }}>Subscribe</button>
                     </div>
                     <span style={{ fontSize: '22px', marginTop: '14px' }}>
-                        Discover Talented Professionals Offering Both Physical and Digital Services on Easy Life
+                        Discover Talented Professionals Offering  Physical  Services on Easy Life 
                     </span>
                 </div>
             </div>

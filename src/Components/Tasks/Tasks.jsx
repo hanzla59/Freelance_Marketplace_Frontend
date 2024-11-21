@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Grid, CircularProgress } from '@mui/material';
-import TaskCard from './TaskCard' 
+import TaskCard from './TaskCard';
 import axios from 'axios';
-
-
 
 const Tasks = () => {
   const [jobs, setJobs] = useState([]);
@@ -18,7 +16,7 @@ const Tasks = () => {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-        setJobs(response.data.jobs);
+        setJobs(response.data.jobs || []); // Ensure jobs is an array
         setLoading(false);
       } catch (err) {
         setError('Failed to fetch jobs');
@@ -40,17 +38,17 @@ const Tasks = () => {
   return (
     <Grid container spacing={2}>
       {jobs.map((job) => (
-        <Grid item xs={12} key={job._id}>
+        <Grid item xs={12} key={job._id || Math.random()}>
           <TaskCard
-            title={job.title}
-            description={job.description}
-            location={job.location}
-            price={job.budget}
-            status={job.status}
-            user={job.buyer.username}
-            jobId={job._id}
-            image={job.image}
-            video={job.video}
+            title={job.title || 'No Title Available'}
+            description={job.description || 'No Description Available'}
+            location={job.location || 'No Location Specified'}
+            price={job.budget || 'N/A'}
+            status={job.status || 'Unknown Status'}
+            user={(job.buyer && job.buyer.username) || 'Anonymous'}
+            jobId={job._id || ''}
+            image={job.image || ''}
+            video={job.video || ''}
           />
         </Grid>
       ))}
@@ -59,4 +57,3 @@ const Tasks = () => {
 };
 
 export default Tasks;
-
