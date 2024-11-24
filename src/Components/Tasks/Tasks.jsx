@@ -16,8 +16,9 @@ const Tasks = () => {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-        setJobs(response.data.jobs || []); // Ensure jobs is an array
+        setJobs(response.data.jobs || []); 
         setLoading(false);
+        
       } catch (err) {
         setError('Failed to fetch jobs');
         setLoading(false);
@@ -37,6 +38,7 @@ const Tasks = () => {
 
   return (
     <Grid container spacing={2}>
+      
       {jobs.map((job) => (
         <Grid item xs={12} key={job._id || Math.random()}>
           <TaskCard
@@ -49,6 +51,7 @@ const Tasks = () => {
             jobId={job._id || ''}
             image={job.image || ''}
             video={job.video || ''}
+            buyerId={job.buyer || ''}
           />
         </Grid>
       ))}

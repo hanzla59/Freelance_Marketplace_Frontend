@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, Box, Typography, Button, useMediaQuery, useTheme, Snackbar, Alert } from '@mui/material';
 import BidDialog from './BidDialog';
 
-const TaskCard = ({ title, description, location, price, status, user, jobId, image, video }) => {
+const TaskCard = ({ title, description, location, price, status, user, jobId, image, video, buyerId }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -20,11 +20,13 @@ const TaskCard = ({ title, description, location, price, status, user, jobId, im
   const handleOpenBidDialog = () => {
     const auth = localStorage.getItem('auth') === 'true';
     const role = localStorage.getItem('role');
+    const userId = localStorage.getItem('userId');
+    
 
-    if (auth && role === 'seller') {
+    if (auth && (role === 'seller' && userId !== buyerId)) {
       setOpenBidDialog(true);
     } else {
-      setSnackbarMessage(auth ? 'Only sellers can bid on the task.' : 'Please login as a Seller.');
+      setSnackbarMessage(userId === buyerId ? 'You cannot bid on your own task.' : auth ? 'Only sellers can bid on the task.' : 'Please login as a Seller.');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
     }

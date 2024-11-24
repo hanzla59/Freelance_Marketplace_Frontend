@@ -1,4 +1,3 @@
-// ReviewDialog.js
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -12,7 +11,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 
-const ReviewDialog = ({ open, onClose, orderId }) => {
+const BuyerReviewDialog = ({ open, onClose, orderId }) => {
   const [comment, setComment] = useState('');
   const [rating, setRating] = useState(0);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -24,15 +23,20 @@ const ReviewDialog = ({ open, onClose, orderId }) => {
       setSnackbarOpen(true);
       return;
     }
+
     try {
-      await axios.post(`http://localhost:5000/fyp/giveReview/${orderId}`, {
-        rating,
-        review: comment,
-      }, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+      await axios.post(
+        `http://localhost:5000/fyp/giveBuyerReview/${orderId}`,
+        {
+          rating,
+          review: comment,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
 
       setSnackbarMessage('Review added successfully!');
       setSnackbarOpen(true);
@@ -40,7 +44,9 @@ const ReviewDialog = ({ open, onClose, orderId }) => {
       setRating(0);
       onClose(); // Close the dialog after submission
     } catch (error) {
-      setSnackbarMessage(error.response ? error.response.data.message : 'Failed to add review');
+      setSnackbarMessage(
+        error.response ? error.response.data.message : 'Failed to add review'
+      );
       setSnackbarOpen(true);
     }
   };
@@ -52,10 +58,10 @@ const ReviewDialog = ({ open, onClose, orderId }) => {
   return (
     <div>
       <Dialog open={open} onClose={onClose}>
-        <DialogTitle>Submit Your Review</DialogTitle>
+        <DialogTitle>Submit Your Review for the Buyer</DialogTitle>
         <DialogContent>
           <Rating
-            name="simple-controlled"
+            name="buyer-rating"
             value={rating}
             onChange={(event, newValue) => {
               setRating(newValue);
@@ -95,4 +101,4 @@ const ReviewDialog = ({ open, onClose, orderId }) => {
   );
 };
 
-export default ReviewDialog;
+export default BuyerReviewDialog;

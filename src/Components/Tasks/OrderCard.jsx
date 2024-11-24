@@ -2,15 +2,18 @@ import React, { useState } from 'react';
 import { Card, Box, Typography, Button, useTheme, useMediaQuery } from '@mui/material';
 import OrderDetailDialog from './OrderDetailDialog'; // Import the dialog component
 import ReviewDialog from './ReviewDialog'; // Import the review dialog component
+import BuyerReviewDialog from '../User/BuyerReviewDialog';
 
-const OrderCard = ({ orderId, price, status, sellerName, buyerName, creationDate, work, image, video, onCancel, onComplete}) => {
+const OrderCard = ({ orderId, price, status, sellerName, buyerName, creationDate, work, image, video, onCancel, onComplete, buyerId}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const role = localStorage.getItem('role');
+  const userId = localStorage.getItem('userId');
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false); // State for review dialog
+  const [buyerReviewDialogOpen, setBuyerReviewDialogOpen] = useState(false); // State for buyer review dialog
 
   const handleDialogOpen = () => {
     setDialogOpen(true);
@@ -28,6 +31,15 @@ const OrderCard = ({ orderId, price, status, sellerName, buyerName, creationDate
     setReviewDialogOpen(false);
   };
 
+  const handleBuyerReviewDialogOpen = () => {
+    setBuyerReviewDialogOpen(true);
+  };
+
+  const handleBuyerReviewDialogClose = () => {
+    setBuyerReviewDialogOpen(false);
+  };
+
+
   return (
     <>
       <Card sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', padding: 2, boxShadow: 3, marginBottom: 1, border: '2px solid #31473A', backgroundColor: '#EDF4F2' }}>
@@ -36,7 +48,7 @@ const OrderCard = ({ orderId, price, status, sellerName, buyerName, creationDate
             OrderId: {orderId}
           </Typography>
           <Typography variant="body2" color="textSecondary" sx={{ color: 'black', fontSize: '16px', mt: 1 }}>
-            {role === 'buyer' ? `Seller: ${sellerName}` : `Buyer: ${buyerName}`}
+            {userId === buyerId ? `Seller: ${sellerName}` : `Buyer: ${buyerName}`}
           </Typography>
           <Typography variant="body2" color="textSecondary" sx={{ color: 'black', fontSize: '14px', mt: 1 }}>
             Date: {new Date(creationDate).toLocaleDateString()}
@@ -47,11 +59,11 @@ const OrderCard = ({ orderId, price, status, sellerName, buyerName, creationDate
           <Typography variant="h6" component="div" sx={{ color: 'black' }}>
             {price} PKR
           </Typography>
-          {status === 'active' && role === 'buyer' ? (
+          {status === 'active' && userId === buyerId ? (
             <Button variant="contained" color="error" sx={{ mt: 1 }} onClick={onCancel}>
               Cancel
             </Button>
-          ) : status === 'complete' && role === 'buyer' ? (
+          ) : status === 'complete' && userId === buyerId ? (
             <>
             <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
 
@@ -59,12 +71,12 @@ const OrderCard = ({ orderId, price, status, sellerName, buyerName, creationDate
                 Open
               </Button>
               <Button variant="outlined" color="secondary" sx={{ mt: 1, color: 'green', borderColor: 'green' }} onClick={handleReviewDialogOpen}>
-                Review
+                Give Review to Seller
               </Button>
 
             </Box>
             </>
-          ) : status === 'active' && role === 'seller' ? (
+          ) : status === 'active' && userId !== buyerId ? (
             <>
             <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
               <Button variant="outlined" color="error" sx={{ mt: 1 }} onClick={onCancel}>
@@ -78,7 +90,15 @@ const OrderCard = ({ orderId, price, status, sellerName, buyerName, creationDate
             </>
           ) : (
             <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-              {status}
+              <Button variant="contained"  sx={{ mt: 1,mr:1, backgroundColor: 'green', color: 'white' }} onClick={handleDialogOpen}>
+                Open
+              </Button>
+              <Button variant="outlined" color="secondary" sx={{ mt: 1, color: 'green', borderColor: 'green' }} onClick={handleBuyerReviewDialogOpen}>
+                Give Review to Buyer
+              </Button>
+
+
+              {/* {status} */}
             </Typography>
           )}
         </Box>
@@ -99,6 +119,12 @@ const OrderCard = ({ orderId, price, status, sellerName, buyerName, creationDate
       <ReviewDialog
         open={reviewDialogOpen}
         onClose={handleReviewDialogClose}
+        orderId={orderId}
+      />
+      {/* BuyerReviewDialog for submitting a review to the buyer */}
+      <BuyerReviewDialog
+        open={buyerReviewDialogOpen}
+        onClose={handleBuyerReviewDialogClose}
         orderId={orderId}
       />
     </>

@@ -27,8 +27,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn}) => {
     const isMenuOpen = Boolean(anchorEl);
     const [role, setRole] = useState(localStorage.getItem("role"));
     
-    // const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token")); // Set initial state based on token presence
-    // let role
+    
     useEffect(() => {
         const token = localStorage.getItem("token");
         setRole(localStorage.getItem("role"));
@@ -81,13 +80,13 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn}) => {
                                 <Button color="inherit" onClick={() => { setActivePage("tasks"); navigate("/tasks"); }}>Tasks</Button>
                                 <Button color="inherit" onClick={() => { setActivePage("services"); navigate("/services"); }}>Services</Button>
                                 {/* Conditional rendering based on role and authentication */}
-                                {isLoggedIn && role === "buyer" && (
+                                {isLoggedIn && (role === "buyer" || role === "seller") && 
                                     <Button color="inherit" onClick={() => { setActivePage("create-task"); navigate("/create-task"); }}>Create Task</Button>
-                                )}
+                                }
                                 {isLoggedIn && role === "seller" && (
                                     <Button color="inherit" onClick={() => { setActivePage("create-service"); navigate("/create-service"); }}>Create Service</Button>
                                 )}
-                                {isLoggedIn && role === "buyer" && <Button color="inherit" component={Link} to="/receive-bids">Receive Bids</Button>}
+                                {isLoggedIn && (role === "buyer" || role === "seller") && <Button color="inherit" component={Link} to="/receive-bids">Receive Bids</Button>}
                                 {isLoggedIn && (
                                     <>
                                         <Button color="inherit" component={Link} to="/task-orders">Task Orders</Button>
@@ -123,6 +122,7 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn}) => {
                             [
                                 <MenuItem key="task-reviews" component={Link} to="/task-reviews" onClick={handleMenuClose}>Task Reviews</MenuItem>,
                                 <MenuItem key="my-services" component={Link} to="/my-services" onClick={handleMenuClose}>My Services</MenuItem>,
+                                <MenuItem key="my-tasks" component={Link} to="/my-tasks" onClick={handleMenuClose}>My Tasks</MenuItem>,
                                 <MenuItem key="service-reviews" component={Link} to="/verify-account" onClick={handleMenuClose}>Verify Account</MenuItem>
                             ]
                         ) : (
@@ -152,9 +152,18 @@ const Navbar = ({ isLoggedIn, setIsLoggedIn}) => {
                                 </ListItem>
                             )}
                             {isLoggedIn && role === "seller" && (
+                                <>
+                                <ListItem component={Link} to="/create-task" onClick={() => { handleDrawerToggle(); setActivePage("create-task"); }}>
+                                    <ListItemText primary="Create Task" />
+                                </ListItem>
                                 <ListItem component={Link} to="/create-service" onClick={() => { handleDrawerToggle(); setActivePage("create-service"); }}>
                                     <ListItemText primary="Create Service" />
                                 </ListItem>
+                                <ListItem component={Link} to="/receive-bids" onClick={handleDrawerToggle}>
+                                    <ListItemText primary="Receive Bids" />
+                                </ListItem>
+
+                                </>
                             )}
                             {isLoggedIn && role === "buyer" && (
                                 <ListItem component={Link} to="/receive-bids" onClick={handleDrawerToggle}>

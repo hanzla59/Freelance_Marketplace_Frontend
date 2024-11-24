@@ -336,7 +336,7 @@ import { useNavigate } from "react-router-dom";
 import image from "../../Assets/logo.png";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-const Signup = ({ isLoggedIn, setIsLoggedIn }) => {
+const Signup = ({ isLoggedIn, setIsLoggedIn}) => {
     const [roleName, setRoleName] = useState("buyer");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");

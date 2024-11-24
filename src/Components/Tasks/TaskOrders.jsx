@@ -220,6 +220,7 @@ const TaskOrders = () => {
                             work={order.work || 'No work details provided'} // Fallback for missing work
                             image={order.image || ''} // Handle missing image
                             video={order.video || ''} // Handle missing video
+                            buyerId={order.buyer._id}
                             onCancel={() => handleCancel(order._id)}
                             onComplete={() => handleCompleteClick(order._id)}
                         />

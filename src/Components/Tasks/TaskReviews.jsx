@@ -59,7 +59,7 @@ const TaskReviews = () => {
             <Box sx={{ flex: 1, textAlign: isMobile ? 'left' : 'right' }}>
               <Rating value={review.rating} readOnly />
               <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-                Reviewed by: {review.client?.username || 'Unknown'} {/* Buyer Username */}
+                Reviewed by: {review.buyer?.username || 'Unknown'} {/* Buyer Username */}
               </Typography>
             </Box>
           </Card>

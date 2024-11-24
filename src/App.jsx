@@ -31,7 +31,6 @@ function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token")); 
   const [complainsSent, setComplainsSent] = useState([]);
-  
 
   return (
     <>
@@ -44,13 +43,13 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/services" element={<Services />} />
-        <Route path="/login" element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
-        <Route path="/signup" element={<Signup isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />} />
+        <Route path="/login" element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}   />} />
+        <Route path="/signup" element={<Signup isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}  />} />
 
         {/* Routes previously protected */}
         <Route path="/create-task" element={<CreateTask />} />
         <Route path="/create-service" element={<CreateService />} />
-        <Route path="/task-orders" element={<TaskOrders />} />
+        <Route path="/task-orders" element={<TaskOrders  />} />
         <Route path="/service-orders" element={<ServiceOrders />} />
         <Route path="/update-profile" element={<UpdateProfile />} />
         <Route path="/verify-account" element={<VerificationDialog />} />
