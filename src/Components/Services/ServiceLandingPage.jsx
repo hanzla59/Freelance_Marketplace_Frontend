@@ -181,14 +181,15 @@ const ServiceLandingPage = () => {
 
     const auth = localStorage.getItem('auth') === 'true';
     const role = localStorage.getItem('role');
+    const userId = localStorage.getItem('userId');
 
     if (!auth) {
       setSnackbarMessage('Please login as a Buyer.');
       setSnackbarSeverity('error');
       setOpenSnackbar(true);
       return;
-    } else if (role !== 'buyer') {
-      setSnackbarMessage('Only buyers can place orders.');
+    } else if (userId === service.seller._id) { 
+      setSnackbarMessage('you can not place an order on your own service.');
       setSnackbarSeverity('error');
       setOpenSnackbar(true);
       return;

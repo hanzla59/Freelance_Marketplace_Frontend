@@ -84,7 +84,7 @@ const CompleteOrderDialog = ({ open, onClose, order, onOrderDelivered }) => {
       onOrderDelivered();
       onClose();
     } catch (err) {
-      setSnackbarMessage('Failed to deliver the order. Please try again.');
+      setSnackbarMessage(err.response.data.message || 'Failed to deliver the order. Please try again.');
       setSnackbarOpen(true);
     } finally {
       setLoading(false); // Stop loading

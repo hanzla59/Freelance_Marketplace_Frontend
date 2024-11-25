@@ -24,7 +24,9 @@ import DeleteAccount from "./Components/User/DeleteAccount";
 import UpdateService from "./Components/Services/UpdateService";
 import Chat from "./Components/Chat/Chat";
 
+
 import { useState } from "react";
+import UserProfile from "./Components/User/UserProfile";
 
 function App() {
   const location = useLocation(); // Use useLocation to get the current path
@@ -45,7 +47,7 @@ function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/login" element={<Login isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}   />} />
         <Route path="/signup" element={<Signup isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}  />} />
-
+        <Route path="/profile" element={<UserProfile />} />
         {/* Routes previously protected */}
         <Route path="/create-task" element={<CreateTask />} />
         <Route path="/create-service" element={<CreateService />} />

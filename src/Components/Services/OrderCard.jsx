@@ -10,6 +10,7 @@ import {
 import CompleteOrderDialog from './CompleteOrderDialog';
 import GiveReviewDialog from './GiveReviewDialog'; // Import the new dialog component
 import OrderDetailDialog from './OrderDetailDialog';
+import BuyerReviewDialog from '../User/BuyerReviewDialog';
 import axios from 'axios';
 
 const formatDate = (isoDate) => {
@@ -30,6 +31,7 @@ const OrderCard = ({ order }) => {
     const handleDialogClose = () => setOpenCompleteDialog(false);
     const handleReviewDialogClose = () => setOpenReviewDialog(false); // Close review dialog
     const handleOrderDetailDialogClose = () => setOpenOrderDetailDialog(false); // Close order details dialog
+    const [buyerReviewDialogOpen, setBuyerReviewDialogOpen] = useState(false);
 
     const handleOrderDelivered = () => {
         setTimeout(() => window.location.reload(), 2000);
@@ -37,6 +39,8 @@ const OrderCard = ({ order }) => {
 
     const isSeller = localStorage.getItem('role') === 'seller';
     const isBuyer = localStorage.getItem('role') === 'buyer';
+
+    const userId = localStorage.getItem('userId');
 
     const handleCancelOrder = async (orderId) => {
         try {
@@ -63,9 +67,14 @@ const OrderCard = ({ order }) => {
 
     const handleOrderDetails = () => {
         setOpenOrderDetailDialog(true);
-        console.log(order.image);
-        console.log(order.video);
-        console.log(order.comment);
+    };
+
+    const handleBuyerReviewDialogOpen = () => {
+        setBuyerReviewDialogOpen(true);
+    };
+
+    const handleBuyerReviewDialogClose = () => {
+        setBuyerReviewDialogOpen(false);
     };
 
     return (
@@ -101,7 +110,7 @@ const OrderCard = ({ order }) => {
                             <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
                                 {order.status === 'active' ? (
                                     <>
-                                        {isSeller && (
+                                        {userId === order.seller ? (
                                             <>
                                                 <Button variant="outlined" color="error" onClick={() => handleCancelOrder(order._id)}>
                                                     Cancel Order
@@ -110,25 +119,29 @@ const OrderCard = ({ order }) => {
                                                     Complete Order
                                                 </Button>
                                             </>
-                                        )}
-                                        {isBuyer && (
+                                        ) : (
                                             <Button variant="contained" color="error" onClick={() => handleCancelOrder(order._id)}>
                                                 Cancel Order
                                             </Button>
                                         )}
                                     </>
-                                ) : order.status === 'complete' && isBuyer ? (
+                                ) : order.status === 'complete' && userId === order.buyer ? (
                                     <>
                                         <Button variant="outlined" sx={{ color: 'black', mr: 1, borderColor: 'black' }} onClick={handleOrderDetails}>
                                             Order Details
                                         </Button>
                                         <Button variant="contained" color="success" onClick={handleGiveReview} sx={{ mr: 1 }}>
-                                            Give Review
+                                            Give Review to seller
                                         </Button>
                                     </>
                                 ) : (
                                     <Typography variant="body2" sx={{ color: order.status === 'delivered' ? 'green' : 'red' }}>
-                                        {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                        <Button variant="outlined" sx={{ color: 'black', mr: 1, borderColor: 'black' }} onClick={handleOrderDetails}>
+                                            Order Details
+                                        </Button>
+                                        <Button variant="contained" color="success" onClick={handleBuyerReviewDialogOpen} sx={{ mr: 1 }}>
+                                            Give Review to Buyer
+                                        </Button>
                                     </Typography>
                                 )}
                             </Grid>
@@ -152,6 +165,11 @@ const OrderCard = ({ order }) => {
                 open={openOrderDetailDialog}
                 onClose={handleOrderDetailDialogClose}
                 order={order}
+            />
+            <BuyerReviewDialog
+                open={buyerReviewDialogOpen}
+                onClose={handleBuyerReviewDialogClose}
+                orderId={order._id}
             />
         </>
     );
