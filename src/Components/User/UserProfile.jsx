@@ -104,8 +104,8 @@ const UserProfile = () => {
                         fullWidth
                         color="primary"
                     >
-                        <ToggleButton value="buyer">See as Buyer Profile</ToggleButton>
-                        <ToggleButton value="seller">See as Seller Profile</ToggleButton>
+                        <ToggleButton value="buyer">See as Client Profile</ToggleButton>
+                        <ToggleButton value="seller">See as Service Provider Profile</ToggleButton>
                     </ToggleButtonGroup>
                 </Box>
             )}
@@ -115,7 +115,7 @@ const UserProfile = () => {
                 {viewMode === "buyer" ? (
                     <Box>
                         <Typography variant="h6" color="primary" mb={1}>
-                            Buyer Details
+                            Performance as Client
                         </Typography>
                         <Typography>Rating: {userData.buyerRating || "Not rated yet"}</Typography>
                         <Typography>Completed Orders: {userData.buyerCompleteOrders}</Typography>
@@ -124,7 +124,7 @@ const UserProfile = () => {
                 ) : (
                     <Box>
                         <Typography variant="h6" color="primary" mb={1}>
-                            Seller Details
+                            Performance as Service Provider
                         </Typography>
                         <Typography>Rating: {userData.sellerRating || "Not rated yet"}</Typography>
                         <Typography>Completed Orders: {userData.sellerCompleteOrders}</Typography>
@@ -159,16 +159,11 @@ const ReviewList = ({ reviews, viewMode, isMobile }) => {
                             alignItems: "flex-start",
                             justifyContent: "space-between",
                             boxShadow: 3,
+                            border: '1px solid green'
                         }}
                     >
                         <Box
-                            sx={{
-                                flex: 1,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "flex-start",
-                                padding: 1,
-                            }}
+                            
                         >
                             <Typography
                                 variant="body1"
@@ -178,7 +173,7 @@ const ReviewList = ({ reviews, viewMode, isMobile }) => {
                                     marginRight: 1, // Adds spacing between "Comment:" and the content
                                 }}
                             >
-                                Comment:
+                                Comment
                             </Typography>
                             <Typography
                                 variant="body1" // Keeps the text clean and simple

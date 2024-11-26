@@ -11,6 +11,7 @@ import CompleteOrderDialog from './CompleteOrderDialog';
 import GiveReviewDialog from './GiveReviewDialog'; // Import the new dialog component
 import OrderDetailDialog from './OrderDetailDialog';
 import BuyerReviewDialog from '../User/BuyerReviewDialog';
+import BuyerProfileDialog from '../Tasks/BuyerProfileDialog';
 import axios from 'axios';
 
 const formatDate = (isoDate) => {
@@ -32,13 +33,14 @@ const OrderCard = ({ order }) => {
     const handleReviewDialogClose = () => setOpenReviewDialog(false); // Close review dialog
     const handleOrderDetailDialogClose = () => setOpenOrderDetailDialog(false); // Close order details dialog
     const [buyerReviewDialogOpen, setBuyerReviewDialogOpen] = useState(false);
-
+    const [profileDialogOpen, setProfileDialogOpen] = useState(false);
     const handleOrderDelivered = () => {
         setTimeout(() => window.location.reload(), 2000);
     };
 
     const isSeller = localStorage.getItem('role') === 'seller';
     const isBuyer = localStorage.getItem('role') === 'buyer';
+    console.log(order.buyer.username)
 
     const userId = localStorage.getItem('userId');
 
@@ -77,6 +79,14 @@ const OrderCard = ({ order }) => {
         setBuyerReviewDialogOpen(false);
     };
 
+    const handleProfileDialogOpen = () => {
+        setProfileDialogOpen(true);
+    };
+
+    const handleProfileDialogClose = () => {
+        setProfileDialogOpen(false);
+    };
+
     return (
         <>
             <Card
@@ -105,7 +115,10 @@ const OrderCard = ({ order }) => {
                         <Grid container justifyContent="space-between" alignItems="center" sx={{ mt: 2, marginLeft: 1 }}>
                             <Grid item xs={12} sm={6}>
                                 <Typography variant="body1">Location: {order.location}</Typography>
+                                <div style={{display:'flex'}}>
                                 <Typography variant="body2">Date: {formatDate(order.createdAt)}</Typography>
+                                <Typography variant="body2" onClick={handleProfileDialogOpen} sx={{color:'brown', cursor:'pointer', ml:2}}>Client Profile</Typography>
+                                </div>
                             </Grid>
                             <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
                                 {order.status === 'active' ? (
@@ -170,6 +183,11 @@ const OrderCard = ({ order }) => {
                 open={buyerReviewDialogOpen}
                 onClose={handleBuyerReviewDialogClose}
                 orderId={order._id}
+            />
+            <BuyerProfileDialog
+                open={profileDialogOpen}
+                onClose={handleProfileDialogClose}
+                username={order.buyer.username}
             />
         </>
     );

@@ -4,8 +4,9 @@ import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Snackbar, Alert } from '@mui/material';
+import SellerProfileDialog from '../Tasks/SellerProfileDialog';
 
-const ReceivedBidCard = ({ proposal, location, bid, job,  status, onAccept, onReject, sellerId }) => {
+const ReceivedBidCard = ({ proposal, location, bid, job, status, onAccept, onReject, sellerId, sellerName }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -16,6 +17,7 @@ const ReceivedBidCard = ({ proposal, location, bid, job,  status, onAccept, onRe
   const [message, setMessage] = useState('');
   const [currentBid, setCurrentBid] = useState(null);
   const [roomId, setRoomId] = useState(null); // To store the room ID
+  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
 
 
   const handleMessageClick = async (sellerId) => {
@@ -51,7 +53,7 @@ const ReceivedBidCard = ({ proposal, location, bid, job,  status, onAccept, onRe
       const receiverId = sellerId;
 
       const response = await axios.post('http://localhost:5000/fyp/sendMessage', {
-        roomId, 
+        roomId,
         senderId,
         receiverId,
         message,
@@ -70,64 +72,80 @@ const ReceivedBidCard = ({ proposal, location, bid, job,  status, onAccept, onRe
     }
   };
 
+  const handleProfileDialogOpen = () => {
+    setProfileDialogOpen(true);
+  };
+
+  const handleProfileDialogClose = () => {
+    setProfileDialogOpen(false);
+  };
+
   return (
     <>
-    <Card sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', padding: 2, boxShadow: 3, border: '2px solid green' }}>
-      {/* Left side: Proposal and Location */}
-      <Box flex={2} sx={{ display: 'flex', flexDirection: 'column' }}>
-        <Typography variant="h5" color="black" >
-          Job: {job}
-        </Typography>
-        <Typography variant="h6" component="div" gutterBottom>
-          {proposal}
-        </Typography>
-        <Typography variant="body2" color="textSecondary" sx={{ color: 'black', fontSize: '16px', mt: 1 }}>
-          Location: {location}
-        </Typography>
-      </Box>
-
-      {/* Right side: Bid Price and Status/Actions */}
-      <Box flex={1} sx={{ display: 'flex', flexDirection: 'column', alignItems: isMobile ? 'flex-start' : 'flex-end' }}>
-        <Typography variant="h6" component="div" sx={{ color: 'black' }}>
-          {bid} PKR
-        </Typography>
-
-        {/* Status or Accept/Reject Buttons */}
-        {status === 'submitted' ? (
-          <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-            <Button 
-              variant="contained"  
-              onClick={() => handleMessageClick(sellerId)} 
-              style={{ color: 'white', backgroundColor: 'black'}}
-            >
-              Message
-            </Button>
-            <Button variant="contained" color="success" onClick={onAccept}>
-              Accept
-            </Button>
-            <Button variant="outlined" color="error" onClick={onReject}>
-              Reject
-            </Button>
-          </Box>
-        ) : (
-          <Typography variant="body2" color="textSecondary" sx={{ marginTop: 1 }}>
-            <Button 
-              variant="contained" 
-              
-              onClick={() => handleMessageClick(sellerId)} 
-              style={{ marginRight:'10px', color: 'white', backgroundColor: 'black'}}
-            >
-              Message
-            </Button>
-            {status}
+      <Card sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', padding: 2, boxShadow: 3, border: '2px solid green' }}>
+        {/* Left side: Proposal and Location */}
+        <Box flex={2} sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Typography variant="h5" color="black" >
+            Job: {job}
           </Typography>
-        )}
-      </Box>
-    </Card>
+          <Typography variant="h6" component="div" gutterBottom>
+            {proposal}
+          </Typography>
+          <div style={{ display: 'flex' }}>
+          {/* <Typography variant="body2" color="textSecondary" sx={{ color: 'black', fontSize: '16px' }}>
+            Location: {location}
+          </Typography> */}
+          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '14px',  cursor: 'pointer', color: 'brown' }} onClick={handleProfileDialogOpen}>
+           Service Provider Profile
+          </Typography>
+          </div>
+          
+          
+          
+        </Box>
+
+        {/* Right side: Bid Price and Status/Actions */}
+        <Box flex={1} sx={{ display: 'flex', flexDirection: 'column', alignItems: isMobile ? 'flex-start' : 'flex-end' }}>
+          <Typography variant="h6" component="div" sx={{ color: 'black' }}>
+            {bid} PKR
+          </Typography>
+
+          {/* Status or Accept/Reject Buttons */}
+          {status === 'submitted' ? (
+            <Box sx={{ display: 'flex', gap: 1, mt: 3 }}>       
+              <Button
+                variant="contained"
+                onClick={() => handleMessageClick(sellerId)}
+                style={{ color: 'white', backgroundColor: 'black' }}
+              >
+                Message
+              </Button>
+              <Button variant="contained" color="success" onClick={onAccept}>
+                Accept
+              </Button>
+              <Button variant="outlined" color="error" onClick={onReject}>
+                Reject
+              </Button>
+            </Box>
+          ) : (
+            <Typography variant="body2" color="textSecondary" sx={{ marginTop: 3 }}>
+              <Button
+                variant="contained"
+
+                onClick={() => handleMessageClick(sellerId)}
+                style={{ marginRight: '10px', color: 'white', backgroundColor: 'black' }}
+              >
+                Message
+              </Button>
+              {status}
+            </Typography>
+          )}
+        </Box>
+      </Card>
 
 
-    {/* Snackbar for success message */}
-    <Snackbar open={!!successMessage} autoHideDuration={6000} onClose={() => setSuccessMessage('')}>
+      {/* Snackbar for success message */}
+      <Snackbar open={!!successMessage} autoHideDuration={6000} onClose={() => setSuccessMessage('')}>
         <Alert onClose={() => setSuccessMessage('')} severity="success" sx={{ width: '100%' }}>
           {successMessage}
         </Alert>
@@ -167,6 +185,11 @@ const ReceivedBidCard = ({ proposal, location, bid, job,  status, onAccept, onRe
           </Button>
         </DialogActions>
       </Dialog>
+      <SellerProfileDialog
+        open={profileDialogOpen}
+        onClose={handleProfileDialogClose}
+        username={sellerName}
+      />
     </>
   );
 };

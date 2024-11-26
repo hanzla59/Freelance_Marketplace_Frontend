@@ -18,6 +18,7 @@ function ComplainDialog({ setComplainsSent }) {
     const [open, setOpen] = useState(false);
     const [username, setUsername] = useState('');
     const [complain, setComplain] = useState('');
+    const [orderId, setOrderId] = useState('');
     const [image, setImage] = useState(null);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -50,6 +51,7 @@ function ComplainDialog({ setComplainsSent }) {
         const formData = new FormData();
         formData.append('against', username);
         formData.append('complain', complain);
+        formData.append('orderId', orderId);
         if (image) {
             formData.append('complainImage', image);
         }
@@ -89,6 +91,14 @@ function ComplainDialog({ setComplainsSent }) {
                             fullWidth
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+                         <TextField
+                            label="OrderId"
+                            variant="outlined"
+                            fullWidth
+                            value={orderId}
+                            onChange={(e) => setOrderId(e.target.value)}
                             required
                         />
                         <TextField

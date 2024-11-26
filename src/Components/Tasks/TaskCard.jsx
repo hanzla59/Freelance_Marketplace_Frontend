@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Box, Typography, Button, useMediaQuery, useTheme, Snackbar, Alert } from '@mui/material';
 import BidDialog from './BidDialog';
+import BuyerProfileDialog from './BuyerProfileDialog';
 
 const TaskCard = ({ title, description, location, price, status, user, jobId, image, video, buyerId }) => {
   const theme = useTheme();
@@ -16,6 +17,8 @@ const TaskCard = ({ title, description, location, price, status, user, jobId, im
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+
+  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
 
   const handleOpenBidDialog = () => {
     const auth = localStorage.getItem('auth') === 'true';
@@ -35,6 +38,14 @@ const TaskCard = ({ title, description, location, price, status, user, jobId, im
   const handleCloseBidDialog = () => setOpenBidDialog(false);
   const handleCloseSnackbar = () => setSnackbarOpen(false);
 
+  const handleProfileDialogOpen = () => {
+    setProfileDialogOpen(true);
+  };
+
+  const handleProfileDialogClose = () => {
+    setProfileDialogOpen(false);
+  };
+
   return (
     <>
       <Card sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', padding: 2, boxShadow: 3, border: '2px solid darkgreen', backgroundColor: 'white' }}>
@@ -45,9 +56,14 @@ const TaskCard = ({ title, description, location, price, status, user, jobId, im
           <Typography variant="body2" color="textSecondary" sx={{ color: 'black', fontSize: '18px' }}>
             {truncateDescription(description)}
           </Typography>
-          <Typography variant="body2" color="textSecondary" sx={{ color: 'gray', fontSize: '14px', mt: 1 }}>
+          <div style={{display:'flex'}}>
+          {/* <Typography variant="body2" color="textSecondary" sx={{ color: 'gray', fontSize: '14px', mt: 1 }}>
             Buyer: {user}
+          </Typography> */}
+          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '14px',  cursor: 'pointer', color: 'brown', mt:1 }} onClick={handleProfileDialogOpen}>
+            Client Profile
           </Typography>
+          </div>
         </Box>
 
         <Box flex={1} sx={{ display: 'flex', flexDirection: 'column', alignItems: isMobile ? 'flex-start' : 'flex-end' }}>
@@ -94,6 +110,11 @@ const TaskCard = ({ title, description, location, price, status, user, jobId, im
           {snackbarMessage}
         </Alert>
       </Snackbar>
+      <BuyerProfileDialog
+        open={profileDialogOpen}
+        onClose={handleProfileDialogClose}
+        username={user}
+      />
     </>
   );
 };

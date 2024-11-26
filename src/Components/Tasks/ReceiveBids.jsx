@@ -244,6 +244,7 @@ const ReceivedBids = () => {
               job={bid.job.title}
               status={bid.status}
               sellerId={bid.seller._id}
+              sellerName={bid.seller.username}
               onAccept={() => handleAccept(bid._id)}
               onReject={() => handleReject(bid._id)}
             />

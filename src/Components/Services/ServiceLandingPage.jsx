@@ -10,6 +10,7 @@ import {
   Card,
   CardMedia,
   IconButton,
+  Avatar,
   Snackbar,
   Alert, Dialog, DialogActions, DialogContent, DialogTitle,
 } from '@mui/material';
@@ -17,6 +18,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
+import SellerProfileDialog from '../Tasks/SellerProfileDialog';
 
 // Styled components for the arrow buttons
 const ArrowButton = styled(IconButton)(({ theme }) => ({
@@ -48,6 +50,8 @@ const ServiceLandingPage = () => {
   const [message, setMessage] = useState('');
   const [currentBid, setCurrentBid] = useState(null);
   const [roomId, setRoomId] = useState(null); // To store the room ID
+
+  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
 
   // Input from buyer to place order
   const [price, setPrice] = useState('');
@@ -188,7 +192,7 @@ const ServiceLandingPage = () => {
       setSnackbarSeverity('error');
       setOpenSnackbar(true);
       return;
-    } else if (userId === service.seller._id) { 
+    } else if (userId === service.seller._id) {
       setSnackbarMessage('you can not place an order on your own service.');
       setSnackbarSeverity('error');
       setOpenSnackbar(true);
@@ -226,6 +230,14 @@ const ServiceLandingPage = () => {
       });
   };
 
+  const handleProfileDialogOpen = () => {
+    setProfileDialogOpen(true);
+  };
+
+  const handleProfileDialogClose = () => {
+    setProfileDialogOpen(false);
+  };
+
   return (
     <Grid container spacing={2}>
       <Snackbar
@@ -243,7 +255,14 @@ const ServiceLandingPage = () => {
       <Grid item xs={12} md={8}>
         <Box sx={{ p: 3 }}>
           <Typography variant="h4">{service.title}</Typography>
-          <Typography variant="subtitle1" sx={{ mt: 1 }}>Seller: {service.seller.username}</Typography>
+          <div style={{display:'flex'}}>
+          <Avatar
+            src={''}
+            sx={{ width: 25, height: 25, mt:"10.5px", cursor:'pointer' }}
+            onClick={handleProfileDialogOpen}
+          />
+          <Typography variant="subtitle1" sx={{ mt: 1, ml:1, fontSize:'18px', color: 'brown', cursor: 'pointer' }} onClick={handleProfileDialogOpen}>{service.seller.username}</Typography>
+          </div>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
             <Typography>Orders {service.orders}</Typography>
             <Rating value={service.rating} readOnly />
@@ -353,7 +372,7 @@ const ServiceLandingPage = () => {
               variant="contained"
               color="primary"
               onClick={() => handleMessageClick(service)}
-              style={{marginTop: '22px', marginLeft: '10px', backgroundColor: 'black'}}
+              style={{ marginTop: '22px', marginLeft: '10px', backgroundColor: 'black' }}
             >
               Message
             </Button>
@@ -420,6 +439,11 @@ const ServiceLandingPage = () => {
           {errorMessage}
         </Alert>
       </Snackbar>
+      <SellerProfileDialog
+        open={profileDialogOpen}
+        onClose={handleProfileDialogClose}
+        username={service.seller.username}
+      />
 
 
     </Grid>
