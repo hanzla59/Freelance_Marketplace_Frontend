@@ -18,6 +18,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import image from "../../Assets/logo.png";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Signup = ({ isLoggedIn, setIsLoggedIn}) => {
     const [roleName, setRoleName] = useState("buyer");
@@ -71,7 +72,7 @@ const Signup = ({ isLoggedIn, setIsLoggedIn}) => {
         const formData = { role, username, email, cnic: formattedCnic, location, password };
 
         try {
-            const { data } = await axios.post("http://localhost:5000/fyp/signup", formData);
+            const { data } = await axios.post(`${BASE_URL}/fyp/signup`, formData);
 
             localStorage.setItem("role", data.user.role);
             localStorage.setItem("token", data.token);

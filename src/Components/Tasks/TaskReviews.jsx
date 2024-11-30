@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Card, Typography, Rating, useTheme, useMediaQuery } from '@mui/material';
 import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const TaskReviews = () => {
   const theme = useTheme();
@@ -12,7 +13,7 @@ const TaskReviews = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/fyp/getReviews/${username}`, {
+        const response = await axios.get(`${BASE_URL}/fyp/getReviews/${username}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },

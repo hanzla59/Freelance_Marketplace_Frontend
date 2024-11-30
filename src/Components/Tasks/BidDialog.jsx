@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Typography, Box, Snackbar, Alert } from '@mui/material';
 import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const BidDialog = ({ open, handleClose, title, description, location, price, image, video, jobId }) => {
     const [proposal, setProposal] = useState('');
@@ -30,7 +31,7 @@ const BidDialog = ({ open, handleClose, title, description, location, price, ima
 
         try {
             const { data } = await axios.post(
-                `http://localhost:5000/fyp/bidJob/${jobId}`,
+                `${BASE_URL}/fyp/bidJob/${jobId}`,
                 { proposal, bid, location: bidderLocation },
                 { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
             );

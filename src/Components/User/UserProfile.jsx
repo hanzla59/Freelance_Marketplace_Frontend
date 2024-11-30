@@ -13,6 +13,7 @@ import {
     useTheme,
 } from "@mui/material";
 import axios from "axios";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const UserProfile = () => {
     const [userData, setUserData] = useState(null);
@@ -27,7 +28,7 @@ const UserProfile = () => {
         // Fetch user profile data
         const fetchUserProfile = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/fyp/userProfile", {
+                const response = await axios.get(`${BASE_URL}/fyp/userProfile`, {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${localStorage.getItem("token")}`,

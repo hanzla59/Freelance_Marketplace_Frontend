@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DashboardComponent from './DashboardComponent';
 import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export default function Analytics() {
     const [users, setUsers] = useState({}); // Initialize with an empty object
@@ -8,7 +9,7 @@ export default function Analytics() {
     const [service, setService] = useState({});
     useEffect(() => {
         // Fetch users data
-        axios.get('http://localhost:5000/fyp/admin/getUsers')
+        axios.get(`${BASE_URL}/fyp/admin/getUsers`)
             .then((res) => {
                 console.log('Users API response:', res.data); // Debug log
                 setUsers(res.data); // Set the response directly as the users state
@@ -16,7 +17,7 @@ export default function Analytics() {
             .catch((err) => console.error('Error fetching users:', err));
     
         // Fetch task data
-        axios.get('http://localhost:5000/fyp/admin/getJobs')
+        axios.get(`${BASE_URL}/fyp/admin/getJobs`)
             .then((res) => {
                 console.log('Tasks API response:', res.data); // Debug log
                 setTask(res.data); // Adjust this based on your API response structure
@@ -24,7 +25,7 @@ export default function Analytics() {
             .catch((err) => console.error('Error fetching tasks:', err));
     
         // Fetch services data
-        axios.get('http://localhost:5000/fyp/admin/getServices')
+        axios.get(`${BASE_URL}/fyp/admin/getServices`)
             .then((res) => {
                 console.log('Services API response:', res.data); // Debug log
                 setService(res.data); // Adjust this based on your API response structure

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography, Button, InputBase, Paper, Divider, List, ListItem, ListItemText } from '@mui/material';
 import axios from 'axios';
 import io from 'socket.io-client';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Chat = () => {
   const [rooms, setRooms] = useState([]);
@@ -15,7 +16,7 @@ const Chat = () => {
   useEffect(() => {
     const userId = localStorage.getItem('userId');
     if (userId) {
-      axios.get(`http://localhost:5000/fyp/rooms/${userId}`)
+      axios.get(`${BASE_URL}/fyp/rooms/${userId}`)
         .then((response) => {
           setRooms(response.data || []); // Set empty array if no data
         })
@@ -24,7 +25,7 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
-    socketRef.current = io('http://localhost:5000');
+    socketRef.current = io(`${BASE_URL}`);
 
     socketRef.current.on('receiveMessage', (message) => {
       if (selectedRoom && message.roomId === selectedRoom) {
@@ -47,7 +48,7 @@ const Chat = () => {
     setSelectedRoom(roomId);
     setReceiverName(receiverName || 'Unknown'); // Set default name if no receiverName
 
-    axios.get(`http://localhost:5000/fyp/messages/${roomId}`)
+    axios.get(`${BASE_URL}/fyp/messages/${roomId}`)
       .then((response) => setMessages(response.data.messages || [])) // Ensure messages is an array
       .catch((error) => console.error('Error fetching messages:', error));
 
@@ -65,7 +66,7 @@ const Chat = () => {
 
     socketRef.current.emit('sendMessage', message);
 
-    axios.post('http://localhost:5000/fyp/sendMessage', message, {
+    axios.post(`${BASE_URL}/fyp/sendMessage`, message, {
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     })
       .then((response) => {

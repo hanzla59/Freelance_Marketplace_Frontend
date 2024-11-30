@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Snackbar, Alert } from '@mui/material';
 import SellerProfileDialog from '../Tasks/SellerProfileDialog';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const ReceivedBidCard = ({ proposal, location, bid, job, status, onAccept, onReject, sellerId, sellerName }) => {
   const theme = useTheme();
@@ -26,7 +27,7 @@ const ReceivedBidCard = ({ proposal, location, bid, job, status, onAccept, onRej
 
     // Check if a room already exists or create one
     try {
-      const response = await axios.post('http://localhost:5000/fyp/rooms', {
+      const response = await axios.post(`${BASE_URL}/fyp/rooms`, {
         user1: senderId,
         user2: receiverId,
       }, {
@@ -52,7 +53,7 @@ const ReceivedBidCard = ({ proposal, location, bid, job, status, onAccept, onRej
       const senderId = localStorage.getItem('userId');
       const receiverId = sellerId;
 
-      const response = await axios.post('http://localhost:5000/fyp/sendMessage', {
+      const response = await axios.post(`${BASE_URL}/fyp/sendMessage`, {
         roomId,
         senderId,
         receiverId,
@@ -95,7 +96,7 @@ const ReceivedBidCard = ({ proposal, location, bid, job, status, onAccept, onRej
           {/* <Typography variant="body2" color="textSecondary" sx={{ color: 'black', fontSize: '16px' }}>
             Location: {location}
           </Typography> */}
-          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '14px',  cursor: 'pointer', color: 'brown' }} onClick={handleProfileDialogOpen}>
+          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '14px',  cursor: 'pointer', boxShadow: 3, padding: "4px 10px", borderRadius:1, color: 'black'}} onClick={handleProfileDialogOpen}>
            Service Provider Profile
           </Typography>
           </div>

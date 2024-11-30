@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const SellerProfileDialog = ({ open, onClose, username }) => {
   const [loading, setLoading] = useState(false);
@@ -28,7 +29,7 @@ const SellerProfileDialog = ({ open, onClose, username }) => {
   const fetchSellerProfile = async () => {
     try {
       setLoading(true);
-      const response = await axios.post('http://localhost:5000/fyp/sellerProfile', { username });
+      const response = await axios.post(`${BASE_URL}/fyp/sellerProfile`, { username });
       setProfile(response.data.user);
       setReviews(response.data.jobReview);
       setLoading(false);

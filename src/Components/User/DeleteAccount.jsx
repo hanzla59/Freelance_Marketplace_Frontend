@@ -10,12 +10,15 @@ import {
     Alert,
 } from "@mui/material";
 import axios from "axios";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+import { useNavigate } from 'react-router-dom';
 
 const DeleteAccount = () => {
     const [open, setOpen] = useState(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+    const navigate = useNavigate();
 
     // Open confirmation dialog
     const handleOpen = () => {
@@ -35,7 +38,7 @@ const DeleteAccount = () => {
     // Function to handle account deletion
     const handleDelete = async () => {
         try {
-            const { data } = await axios.delete("http://localhost:5000/fyp/deleteUser", {
+            const { data } = await axios.delete(`${BASE_URL}/fyp/deleteUser`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`,
                 },
@@ -45,6 +48,7 @@ const DeleteAccount = () => {
             localStorage.clear();
             setOpen(false);
             window.location.reload();
+            navigate('/');
         } catch (error) {
             setSnackbarMessage("Account deletion failed: " + error.response?.data?.message || error.message);
             setSnackbarSeverity('error');

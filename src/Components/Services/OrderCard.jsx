@@ -13,6 +13,7 @@ import OrderDetailDialog from './OrderDetailDialog';
 import BuyerReviewDialog from '../User/BuyerReviewDialog';
 import BuyerProfileDialog from '../Tasks/BuyerProfileDialog';
 import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const formatDate = (isoDate) => {
     const date = new Date(isoDate);
@@ -40,14 +41,14 @@ const OrderCard = ({ order }) => {
 
     const isSeller = localStorage.getItem('role') === 'seller';
     const isBuyer = localStorage.getItem('role') === 'buyer';
-    console.log(order.buyer.username)
+    console.log(order.buyer._id)
 
     const userId = localStorage.getItem('userId');
 
     const handleCancelOrder = async (orderId) => {
         try {
             const response = await axios.put(
-                `http://localhost:5000/fyp/orderCancelled/${orderId}`,
+                `${BASE_URL}/fyp/orderCancelled/${orderId}`,
                 {},
                 {
                     headers: {
@@ -115,15 +116,15 @@ const OrderCard = ({ order }) => {
                         <Grid container justifyContent="space-between" alignItems="center" sx={{ mt: 2, marginLeft: 1 }}>
                             <Grid item xs={12} sm={6}>
                                 <Typography variant="body1">Location: {order.location}</Typography>
-                                <div style={{display:'flex'}}>
+                                
                                 <Typography variant="body2">Date: {formatDate(order.createdAt)}</Typography>
-                                <Typography variant="body2" onClick={handleProfileDialogOpen} sx={{color:'brown', cursor:'pointer', ml:2}}>Client Profile</Typography>
-                                </div>
+                                <Typography variant="body2" onClick={handleProfileDialogOpen} sx={{cursor:'pointer',  fontSize:'14px', padding:'2px 10px', mb:0, boxShadow: 3, borderRadius:1, border: '1px solid black', mt:1, maxWidth:'85px'}}>Buyer Profile</Typography>
+                                
                             </Grid>
-                            <Grid item xs={12} sm={6} sx={{ textAlign: 'right' }}>
+                            <Grid item xs={12} sm={6} sx={{ textAlign: 'right', mt:1 }}>
                                 {order.status === 'active' ? (
                                     <>
-                                        {userId === order.seller ? (
+                                        {userId === order.seller._id ? (
                                             <>
                                                 <Button variant="outlined" color="error" onClick={() => handleCancelOrder(order._id)}>
                                                     Cancel Order
@@ -138,7 +139,7 @@ const OrderCard = ({ order }) => {
                                             </Button>
                                         )}
                                     </>
-                                ) : order.status === 'complete' && userId === order.buyer ? (
+                                ) : order.status === 'complete' && userId === order.buyer._id ? (
                                     <>
                                         <Button variant="outlined" sx={{ color: 'black', mr: 1, borderColor: 'black' }} onClick={handleOrderDetails}>
                                             Order Details

@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { AddAPhoto, VideoCall, Delete } from '@mui/icons-material';
 import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const CreateService = () => {
   const [formData, setFormData] = useState({
@@ -83,7 +84,7 @@ const CreateService = () => {
       formDataToSend.append('video', formData.video);
     }
 
-    axios.post('http://localhost:5000/fyp/createService', formDataToSend, {
+    axios.post(`${BASE_URL}/fyp/createService`, formDataToSend, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${localStorage.getItem('token')}`,

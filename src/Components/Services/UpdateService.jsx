@@ -12,6 +12,7 @@ import {
 import { AddAPhoto, VideoCall, Delete } from '@mui/icons-material';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const UpdateService = () => {
     const { id } = useParams();
@@ -31,7 +32,7 @@ const UpdateService = () => {
 
     useEffect(() => {
         // Fetch current service data to populate the form
-        axios.get(`http://localhost:5000/fyp/getService/${id}`)
+        axios.get(`${BASE_URL}/fyp/getService/${id}`)
             .then(response => {
                 const { title, description, location, price, images, video } = response.data;
                 setFormData({
@@ -103,7 +104,7 @@ const UpdateService = () => {
             formDataToSend.append('video', formData.video);
         }
 
-        axios.put(`http://localhost:5000/fyp/updateService/${id}`, formDataToSend, {
+        axios.put(`${BASE_URL}/fyp/updateService/${id}`, formDataToSend, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 Authorization: `Bearer ${localStorage.getItem('token')}`,

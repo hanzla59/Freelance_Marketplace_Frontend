@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Box, Typography, Paper } from '@mui/material';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 function ComplainsList({ complainsSent }) {
     const [complains, setComplains] = useState([]);
@@ -9,7 +10,7 @@ function ComplainsList({ complainsSent }) {
     useEffect(() => {
         const fetchComplains = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/fyp/getComplains', {
+                const response = await axios.get(`${BASE_URL}/fyp/getComplains`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },

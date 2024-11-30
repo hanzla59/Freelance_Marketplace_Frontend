@@ -13,6 +13,7 @@ import {
     Snackbar
 } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -30,7 +31,7 @@ function ComplainsList() {
     useEffect(() => {
         const fetchComplains = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/fyp/admin/getComplain', {
+                const response = await axios.get(`${BASE_URL}/fyp/admin/getComplain`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
@@ -58,7 +59,7 @@ function ComplainsList() {
 
     const handleSendResponse = async () => {
         try {
-            await axios.put(`http://localhost:5000/fyp/admin/updateComplain/${selectedComplain._id}`, {
+            await axios.put(`${BASE_URL}/fyp/admin/updateComplain/${selectedComplain._id}`, {
                 response: responseText
             }, {
                 headers: {

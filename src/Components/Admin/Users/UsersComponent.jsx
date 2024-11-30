@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const UsersComponent = () => {
   const [users, setUsers] = useState([]);
@@ -10,7 +11,7 @@ const UsersComponent = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/fyp/admin/getUsers');
+        const response = await axios.get(`${BASE_URL}/fyp/admin/getUsers`);
         console.log('Users API response:', response.data); // Debug log to check structure
         setUsers(response.data.Users || []); // Use data structure based on actual response
       } catch (err) {
@@ -33,7 +34,7 @@ const UsersComponent = () => {
 
   const handleBanClick = async (id) => {
     try {
-      const res = await axios.put(`http://localhost:5000/fyp/admin/banUser/${id}`);
+      const res = await axios.put(`${BASE_URL}/fyp/admin/banUser/${id}`);
       alert(res.data.message);
       toggleBanStatus(id);
     } catch (error) {
@@ -44,7 +45,7 @@ const UsersComponent = () => {
   const handleUnbanClick = async (id) => {
     try {
       console.log(`Unbanning user with ID: ${id}`);
-      const res = await axios.put(`http://localhost:5000/fyp/admin/unbanUser/${id}`);
+      const res = await axios.put(`${BASE_URL}/fyp/admin/unbanUser/${id}`);
       alert(res.data.message);
       toggleBanStatus(id);
     } catch (error) {

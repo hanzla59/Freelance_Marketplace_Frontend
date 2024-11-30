@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Grid, CircularProgress, Snackbar, Alert, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import ReceivedBidCard from './ReceivedBidCard';
 import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const ReceivedBids = () => {
   const [bids, setBids] = useState([]);
@@ -17,7 +18,7 @@ const ReceivedBids = () => {
   useEffect(() => {
     const fetchBids = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/fyp/getProposals', {
+        const response = await axios.get(`${BASE_URL}/fyp/getProposals`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -35,7 +36,7 @@ const ReceivedBids = () => {
 
   const updateBidStatus = async (bidId, status) => {
     try {
-      const response = await axios.put(`http://localhost:5000/fyp/updateProposal/${bidId}`, {
+      const response = await axios.put(`${BASE_URL}/fyp/updateProposal/${bidId}`, {
         status,
       }, {
         headers: {
@@ -71,6 +72,9 @@ const ReceivedBids = () => {
 
   return (
     <>
+     <div style={{ fontSize: '18px', marginTop: '20px', marginBottom: '10px', backgroundColor: 'green', padding: '10px', fontFamily: 'sans-serif', color: 'white', maxWidth: '100%', borderRadius: '5px', textAlign: 'center', boxShadow: '1px 1px 5px gray' }}>
+       Bids Recived on the Task Which You Have Posted
+      </div>
       <Grid container spacing={2}>
         {bids.map((bid) => (
           <Grid item xs={12} key={bid._id}>

@@ -16,6 +16,7 @@ import {
   Box,
 } from '@mui/material';
 import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const MyTasks = () => {
   const [jobs, setJobs] = useState([]);
@@ -29,7 +30,7 @@ const MyTasks = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/fyp/getJobByUser', {
+        const response = await axios.get(`${BASE_URL}/fyp/getJobByUser`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -52,7 +53,7 @@ const MyTasks = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/fyp/deleteJob/${jobToDelete}`, {
+      await axios.delete(`${BASE_URL}/fyp/deleteJob/${jobToDelete}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },

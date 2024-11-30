@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const VerificationRequestCard = ({ request, openDialog }) => {
     const username = request.user ? request.user.username : 'Unknown User';
@@ -39,7 +40,7 @@ const VerificationRequests = () => {
     useEffect(() => {
         const fetchRequests = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/fyp/admin/verificationRequest');
+                const response = await axios.get(`${BASE_URL}/fyp/admin/verificationRequest`);
                 setRequests(response.data.allVerificationRequests);
             } catch (error) {
                 console.error('Error fetching verification requests', error);
@@ -61,7 +62,7 @@ const VerificationRequests = () => {
     const handleAccept = async () => {
         try {
             await axios.put(
-                `http://localhost:5000/fyp/admin/verifyUser/${selectedRequest._id}`,
+                `${BASE_URL}/fyp/admin/verifyUser/${selectedRequest._id}`,
                 { status: "approved" },
                 { headers: { 'Content-Type': 'application/json' } }
             );
@@ -75,7 +76,7 @@ const VerificationRequests = () => {
     const handleReject = async () => {
         try {
             await axios.put(
-                `http://localhost:5000/fyp/admin/verifyUser/${selectedRequest._id}`,
+                `${BASE_URL}/fyp/admin/verifyUser/${selectedRequest._id}`,
                 { status: "reject" },
                 { headers: { 'Content-Type': 'application/json' } }
             );

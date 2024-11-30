@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, Snackbar, CircularProgress } from '@mui/material';
 import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const CreateTask = () => {
     const [title, setTitle] = useState('');
@@ -48,7 +49,7 @@ const CreateTask = () => {
         setLoading(true); // Set loading to true when starting the API call
 
         try {
-            const response = await axios.post('http://localhost:5000/fyp/postJob', formData, {
+            const response = await axios.post(`${BASE_URL}/fyp/postJob`, formData, {
                 headers: { 
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${localStorage.getItem("token")}` 
@@ -68,6 +69,7 @@ const CreateTask = () => {
             setLoading(false); // Stop loading on error
             const errorMessage = error.response ? error.response.data.message : "An unexpected error occurred";
             setSnackbar({ open: true, message: `${errorMessage}` });
+            console.error(error.error);
         }
     };
 

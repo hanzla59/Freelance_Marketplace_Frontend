@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { Close as CloseIcon, Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const ProfileUpdate = () => {
   const [username, setUsername] = useState("");
@@ -60,7 +61,7 @@ const ProfileUpdate = () => {
     }
 
     try {
-      const { data } = await axios.put("http://localhost:5000/fyp/updateUser", formData, {
+      const { data } = await axios.put(`${BASE_URL}/fyp/updateUser`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

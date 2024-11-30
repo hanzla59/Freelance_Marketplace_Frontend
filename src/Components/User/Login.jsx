@@ -11,6 +11,7 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Password pattern
 const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
@@ -50,7 +51,7 @@ const Login = ({ setIsLoggedIn }) => {
         // Convert username to lowercase before sending the request
         const formData = { username, password };
         try {
-            const { data } = await axios.post("http://localhost:5000/fyp/login", formData);
+            const { data } = await axios.post(`${BASE_URL}/fyp/login`, formData);
 
             localStorage.setItem("token", data.token);
             localStorage.setItem("auth", true);

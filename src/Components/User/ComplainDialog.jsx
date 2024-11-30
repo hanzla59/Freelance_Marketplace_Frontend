@@ -13,6 +13,7 @@ import {
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 function ComplainDialog({ setComplainsSent }) {
     const [open, setOpen] = useState(false);
@@ -57,7 +58,7 @@ function ComplainDialog({ setComplainsSent }) {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/fyp/complain', formData, {
+            const response = await axios.post(`${BASE_URL}/fyp/complain`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -67,6 +68,7 @@ function ComplainDialog({ setComplainsSent }) {
             setComplainsSent((prevComplainsSent) => prevComplainsSent + 1);
             setComplain('');
             setUsername('');
+            setOrderId('');
             setSnackbarOpen(true);
             handleClose();
         } catch (error) {

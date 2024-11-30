@@ -7,6 +7,7 @@ import {
   Grid,
 } from '@mui/material';
 import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const VerificationDialog = () => {
   const [frontCnic, setFrontCnic] = useState(null);
@@ -28,7 +29,7 @@ const VerificationDialog = () => {
     formData.append('backSide', backCnic);
 
     try {
-      const { data } = await axios.post('http://localhost:5000/fyp/applyForVerification', formData, {
+      const { data } = await axios.post(`${BASE_URL}/fyp/applyForVerification`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('token')}`,

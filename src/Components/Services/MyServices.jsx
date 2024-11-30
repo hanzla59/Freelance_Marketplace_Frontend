@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const MyServiceCard = ({ service, onServiceDelete }) => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const MyServiceCard = ({ service, onServiceDelete }) => {
 
   const confirmDelete = () => {
     axios
-      .delete(`http://localhost:5000/fyp/deleteService/${service.id}`, {
+      .delete(`${BASE_URL}/fyp/deleteService/${service.id}`, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -145,7 +146,7 @@ const MyServices = () => {
 
   const fetchServices = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/fyp/getServiceByUser', {
+      const response = await axios.get(`${BASE_URL}/fyp/getServiceByUser`, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('token')}`,

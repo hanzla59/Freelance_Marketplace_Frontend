@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, CircularProgress, Grid, Snackbar, Box, IconButton } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const CompleteOrderDialog = ({ open, onClose, orderId, onCompleteSuccess }) => {
   const [work, setWork] = useState('');
@@ -43,7 +44,7 @@ const CompleteOrderDialog = ({ open, onClose, orderId, onCompleteSuccess }) => {
 
     try {
       const response = await axios.put(
-        `http://localhost:5000/fyp/completeJobOrder/${orderId}`,
+        `${BASE_URL}/fyp/completeJobOrder/${orderId}`,
         formData,
         {
           headers: {

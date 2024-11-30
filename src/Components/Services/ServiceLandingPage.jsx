@@ -19,6 +19,8 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
 import SellerProfileDialog from '../Tasks/SellerProfileDialog';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+import { useNavigate } from 'react-router-dom';
 
 // Styled components for the arrow buttons
 const ArrowButton = styled(IconButton)(({ theme }) => ({
@@ -52,6 +54,7 @@ const ServiceLandingPage = () => {
   const [roomId, setRoomId] = useState(null); // To store the room ID
 
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
+  const navigate = useNavigate();
 
   // Input from buyer to place order
   const [price, setPrice] = useState('');
@@ -70,7 +73,7 @@ const ServiceLandingPage = () => {
 
     // Check if a room already exists or create one
     try {
-      const response = await axios.post('http://localhost:5000/fyp/rooms', {
+      const response = await axios.post(`${BASE_URL}/fyp/rooms`, {
         user1: senderId,
         user2: receiverId,
       }, {
@@ -97,7 +100,7 @@ const ServiceLandingPage = () => {
       // const receiverId = currentBid?.seller?._id;
       const receiverId = service.seller._id;
 
-      const response = await axios.post('http://localhost:5000/fyp/sendMessage', {
+      const response = await axios.post(`${BASE_URL}/fyp/sendMessage`, {
         roomId, // Send the room ID with the message
         senderId,
         receiverId,
@@ -120,7 +123,7 @@ const ServiceLandingPage = () => {
   useEffect(() => {
     const fetchService = async () => {
       try {
-        const serviceResponse = await axios.get(`http://localhost:5000/fyp/getService/${id}`);
+        const serviceResponse = await axios.get(`${BASE_URL}/fyp/getService/${id}`);
         setService(serviceResponse.data);
       } catch (error) {
         console.error('Error fetching service:', error);
@@ -129,7 +132,7 @@ const ServiceLandingPage = () => {
 
     const fetchReviews = async () => {
       try {
-        const reviewsResponse = await axios.get(`http://localhost:5000/fyp/getReviewsOnOrder/${id}`);
+        const reviewsResponse = await axios.get(`${BASE_URL}/fyp/getReviewsOnOrder/${id}`);
         setServiceReviews(reviewsResponse.data.reviews);
       } catch (error) {
         console.error('Error fetching reviews:', error);
@@ -207,7 +210,7 @@ const ServiceLandingPage = () => {
     };
 
     // Make API call
-    axios.post(`http://localhost:5000/fyp/orderPlaced/${id}`, formdata, {
+    axios.post(`${BASE_URL}/fyp/orderPlaced/${id}`, formdata, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -221,6 +224,7 @@ const ServiceLandingPage = () => {
         setSnackbarMessage('Order placed successfully!');
         setSnackbarSeverity('success');
         setOpenSnackbar(true);
+        setTimeout(() => navigate('/services'), 1000);
       })
       .catch((error) => {
         // Show error Snackbar
@@ -258,10 +262,10 @@ const ServiceLandingPage = () => {
           <div style={{display:'flex'}}>
           <Avatar
             src={''}
-            sx={{ width: 25, height: 25, mt:"10.5px", cursor:'pointer' }}
+            sx={{ width: 25, height: 25, mt:"10.5px", cursor:'pointer', backgroundColor:'green' }}
             onClick={handleProfileDialogOpen}
           />
-          <Typography variant="subtitle1" sx={{ mt: 1, ml:1, fontSize:'18px', color: 'brown', cursor: 'pointer' }} onClick={handleProfileDialogOpen}>{service.seller.username}</Typography>
+          <Typography variant="subtitle1" sx={{ mt: 1, ml:1, fontSize:'18px', color: 'green', cursor: 'pointer' }} onClick={handleProfileDialogOpen}>{service.seller.username}</Typography>
           </div>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
             <Typography>Orders {service.orders}</Typography>
