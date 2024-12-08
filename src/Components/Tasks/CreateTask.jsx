@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, Snackbar, CircularProgress } from '@mui/material';
 import axios from 'axios';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
+import { useNavigate } from 'react-router-dom';
 
 const CreateTask = () => {
     const [title, setTitle] = useState('');
@@ -13,6 +14,7 @@ const CreateTask = () => {
     const [errors, setErrors] = useState({});
     const [snackbar, setSnackbar] = useState({ open: false, message: '' });
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleFileChange = (e) => {
         const { name, files } = e.target;
@@ -69,6 +71,11 @@ const CreateTask = () => {
             setLoading(false); // Stop loading on error
             const errorMessage = error.response ? error.response.data.message : "An unexpected error occurred";
             setSnackbar({ open: true, message: `${errorMessage}` });
+            if(error.response?.data?.cnicStatus){
+                setTimeout(() => {
+                    navigate('/verify-account');
+                }, 2000);
+            }
             console.error(error.error);
         }
     };

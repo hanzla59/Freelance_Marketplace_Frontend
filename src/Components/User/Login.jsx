@@ -142,7 +142,7 @@ const Login = ({ setIsLoggedIn }) => {
                         },
                     }}
                 />
-
+                
                 <Button
                     fullWidth
                     variant="contained"
@@ -153,6 +153,7 @@ const Login = ({ setIsLoggedIn }) => {
                 >
                     Login
                 </Button>
+                <Typography variant="body2" align="right" gutterBottom sx={{ color: "brown", cursor: "pointer" }} onClick={() => navigate("/otpForResetPassword")}>Forget Password</Typography>
 
                 <Snackbar
                     open={snackbarOpen}

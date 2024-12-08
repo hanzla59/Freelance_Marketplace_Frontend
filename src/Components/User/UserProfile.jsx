@@ -82,6 +82,9 @@ const UserProfile = () => {
                     <Typography color="text.secondary">
                         Location: {userData.location || "Not specified"}
                     </Typography>
+                    <Typography color="text.secondary">
+                        Email: {userData.email || "Not specified"}
+                    </Typography>
                     {isSeller && userData.skills.length > 0 && (
                         <Typography color="text.secondary">
                             Skills: {userData.skills.join(", ")}

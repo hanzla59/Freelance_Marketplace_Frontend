@@ -87,7 +87,7 @@ const Signup = ({ isLoggedIn, setIsLoggedIn}) => {
             setLocation("");
             setPassword("");
             setTimeout(() => {
-                navigate("/");
+                navigate("/emailVerification");
                 setIsLoggedIn(true);
             }, 1500);
 

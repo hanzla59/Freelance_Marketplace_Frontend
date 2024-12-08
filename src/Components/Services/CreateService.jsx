@@ -12,6 +12,7 @@ import {
 import { AddAPhoto, VideoCall, Delete } from '@mui/icons-material';
 import axios from 'axios';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
+import { useNavigate } from 'react-router-dom';
 
 const CreateService = () => {
   const [formData, setFormData] = useState({
@@ -24,6 +25,7 @@ const CreateService = () => {
   });
   const [errors, setErrors] = useState({});
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+  const navigate = useNavigate();
 
   // Handlers
   const handleInputChange = (e) => {
@@ -106,6 +108,11 @@ const CreateService = () => {
         if (error.response) {
           const errorMessage = error.response.data.message;
           setSnackbar({ open: true, message: errorMessage, severity: 'error' });
+          if(error.response?.data?.cnicStatus){
+            setTimeout(() => {
+              navigate('/verify-account');
+            }, 2000);
+          }
         } else {
           setSnackbar({ open: true, message: "Service creation failed: An unexpected error occurred", severity: 'error' });
         }

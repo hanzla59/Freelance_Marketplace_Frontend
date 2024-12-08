@@ -47,8 +47,8 @@ const DeleteAccount = () => {
             setSnackbarSeverity('success');
             localStorage.clear();
             setOpen(false);
-            window.location.reload();
             navigate('/');
+            window.location.reload();
         } catch (error) {
             setSnackbarMessage("Account deletion failed: " + error.response?.data?.message || error.message);
             setSnackbarSeverity('error');

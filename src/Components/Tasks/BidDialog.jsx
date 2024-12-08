@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Typography, Box, Snackbar, Alert } from '@mui/material';
 import axios from 'axios';
 const BASE_URL = import.meta.env.VITE_BASE_URL;
+import { useNavigate } from 'react-router-dom';
 
 const BidDialog = ({ open, handleClose, title, description, location, price, image, video, jobId }) => {
     const [proposal, setProposal] = useState('');
@@ -11,6 +12,7 @@ const BidDialog = ({ open, handleClose, title, description, location, price, ima
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState('success');
     const [errors, setErrors] = useState({ proposal: false, bid: false, location: false });
+    const navigate = useNavigate();
 
     const validateFields = () => {
         setErrors({
@@ -50,6 +52,11 @@ const BidDialog = ({ open, handleClose, title, description, location, price, ima
         } catch (err) {
             const errorMessage = err.response?.data?.message || 'An unexpected error occurred';
             setSnackbarMessage(errorMessage);
+            if(err.response?.data?.cnicStatus){
+                setTimeout(() => {
+                    navigate('/verify-account');
+                }, 2000);
+            }
             setSnackbarSeverity('error');
             setSnackbarOpen(true);
         }

@@ -229,6 +229,9 @@ const ServiceLandingPage = () => {
       .catch((error) => {
         // Show error Snackbar
         setSnackbarMessage(error.response.data.message);
+        if(error.response.data.cnicStatus){
+          setTimeout(() => navigate('/verify-account'), 2000);
+        }
         setSnackbarSeverity('error');
         setOpenSnackbar(true);
       });
