@@ -70,6 +70,13 @@ const ServiceLandingPage = () => {
     // setCurrentBid(bid);
     const senderId = localStorage.getItem('userId');
     const receiverId = service.seller._id;
+    const auth = localStorage.getItem('auth') === 'true';
+
+    if (!auth) {
+      setErrorMessage('please login first');
+      setTimeout(() => navigate('/login'), 2000);
+      return;
+    }
 
     // Check if a room already exists or create one
     try {
@@ -94,6 +101,7 @@ const ServiceLandingPage = () => {
       setErrorMessage('Message cannot be empty');
       return;
     }
+    
 
     try {
       const senderId = localStorage.getItem('userId');
@@ -191,7 +199,8 @@ const ServiceLandingPage = () => {
     const userId = localStorage.getItem('userId');
 
     if (!auth) {
-      setSnackbarMessage('Please login as a Buyer.');
+      setSnackbarMessage('Please login first to place an order.');
+      setTimeout(() => navigate('/login'), 2000);
       setSnackbarSeverity('error');
       setOpenSnackbar(true);
       return;

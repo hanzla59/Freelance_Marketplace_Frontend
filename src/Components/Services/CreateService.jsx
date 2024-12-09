@@ -103,6 +103,9 @@ const CreateService = () => {
           images: [],
           video: null,
         });
+        setTimeout(() => {
+          navigate('/services');
+        }, 2000);
       })
       .catch((error) => {
         if (error.response) {

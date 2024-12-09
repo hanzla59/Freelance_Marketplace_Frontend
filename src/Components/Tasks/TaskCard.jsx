@@ -3,6 +3,7 @@ import { Card, Box, Typography, Button, useMediaQuery, useTheme, Snackbar, Alert
 import BidDialog from './BidDialog';
 import BuyerProfileDialog from './BuyerProfileDialog';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { useNavigate } from 'react-router-dom';
 
 
 const TaskCard = ({ title, description, location, price, status, user, jobId, image, video, buyerId }) => {
@@ -21,6 +22,7 @@ const TaskCard = ({ title, description, location, price, status, user, jobId, im
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleOpenBidDialog = () => {
     const auth = localStorage.getItem('auth') === 'true';
@@ -32,6 +34,7 @@ const TaskCard = ({ title, description, location, price, status, user, jobId, im
       setOpenBidDialog(true);
     } else {
       setSnackbarMessage(userId === buyerId ? 'You cannot bid on your own task.' : auth ? 'Only sellers can bid on the task.' : 'Please login as a Seller.');
+      if(!auth){ setTimeout(() => navigate('/login'), 2000); } 
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
     }

@@ -66,6 +66,9 @@ const CreateTask = () => {
                 setLocation('');
                 setImage(null);
                 setVideo(null);
+                setTimeout(() => {
+                    navigate('/tasks');
+                }, 2000);
             }
         } catch (error) {
             setLoading(false); // Stop loading on error

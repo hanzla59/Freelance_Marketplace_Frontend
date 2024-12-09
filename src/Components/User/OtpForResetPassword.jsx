@@ -121,7 +121,7 @@ export default function OtpForResetPassword() {
                 <CardContent>
                     {/* Heading */}
                     <Typography variant="h5" align="center" gutterBottom>
-                        Reset Password
+                       OTP For Reset Password
                     </Typography>
 
                     {/* Email Input Field */}
@@ -188,6 +188,7 @@ export default function OtpForResetPassword() {
                             >
                                 Verify OTP
                             </Button>
+                            <Typography sx={{textAlign:"center", mt:1, cursor:"pointer" }} onClick={()=>{setIsOtpSent(false)}}>resend otp</Typography>
                         </>
                     )}
 
